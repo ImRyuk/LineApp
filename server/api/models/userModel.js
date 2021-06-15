@@ -17,11 +17,18 @@ const UserSchema = new Schema({
     },
     mail: {
         type: String,
+        unique: true,
         required: `Please enter your mail`
     },
     roles: {
-        type: Array
-    }
+        type: Array,
+        default: "ROLE_MERCHANT"
+    },
+    shops: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'Shop'}
+    ]
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Users', UserSchema);
