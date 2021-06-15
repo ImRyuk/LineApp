@@ -10,8 +10,8 @@ const ShopSchema = new Schema({
     siret_number: {
         type: "Number",
         required: 'Please enter a valid siret number',
-        max: 9,
-        min: 9,
+        maxlength: 9,
+        minlength: 9,
         unique: true
     },
     name: {
@@ -23,13 +23,12 @@ const ShopSchema = new Schema({
         required: `Please enter your address name`
     },
     adress_number: {
-        type: Number,
-        unique: true,
+        type: String,
         required: `Please enter your address number`
     },
     zip_code: {
         type: Number,
-        max: 5,
+        maxlength: 5,
         required: `Please enter your zip code`
     },
     merchant:{

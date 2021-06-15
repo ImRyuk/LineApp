@@ -24,12 +24,9 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-const routes = require('./api/routes/userRoutes'); //importing route
-routes(app); //register the route
-
+require("./api/routes/userRoutes")(app);
+require('./api/routes/shopRoutes')(app);
 
 app.listen(port);
-
 
 console.log('APP Line API server started on: ' + port);
