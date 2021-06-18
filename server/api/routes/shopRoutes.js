@@ -11,4 +11,7 @@ module.exports = function(app) {
         .get(shops.read_a_shop)
         .put(shops.update_a_shop)
         .delete(shops.delete_a_shop);
+
+    app.route('/search/shops/:searchString')
+        .get(shops.search_shops);
 };

@@ -28,6 +28,7 @@ exports.create_a_shop = async (req, res) => {
             zip_code: req.body.zip_code,
             merchant: req.body.merchant,
             type: req.body.type,
+            verified: req.body.verified
         });
 
         user.shops.push(shop);
@@ -79,5 +80,13 @@ exports.delete_a_shop = async function (req, res) {
                 res.send(err);
             res.json({message: 'Shop successfully deleted'});
         });
+    });
+};
+
+exports.search_shops = function(req, res) {
+    Shop.find({"$or": [ { name : { $regex: req.params.searchString }}]},function(err, task) {
+        if (err)
+            res.send(err);
+        res.json(task);
     });
 };

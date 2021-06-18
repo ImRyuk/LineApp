@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 
 const mongoose = require('mongoose'),
     User = mongoose.model('Users');
+const Shop = mongoose.model('Shops');
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -95,6 +96,22 @@ exports.update_a_user = function(req, res) {
     });
 };
 
+exports.get_all_shops = function(req, res) {
+    Shop.find({merchant: req.params.userId}, function(err, task) {
+        if (err)
+            res.send(err);
+        res.json(task);
+    });
+};
+
+exports.get_all_shops = function(req, res) {
+    Shop.find({merchant: req.params.userId}, function(err, task) {
+        if (err)
+            res.send(err);
+        res.json(task);
+    });
+};
+
 exports.delete_a_user = function(req, res) {
 
     User.deleteOne({
@@ -105,3 +122,21 @@ exports.delete_a_user = function(req, res) {
         res.json({ message: 'User successfully deleted' });
     });
 };
+
+//ADMIN SECTION
+
+exports.list_all_unverified = function (req, res) {
+    Shop.find({verified: false}, function(err, task) {
+        if (err)
+            res.send(err);
+        res.json(task);
+    });
+}
+
+exports.verify_a_shop = function (req, res) {
+    Shop.findOneAndUpdate({_id: req.params.shopId}, {$set: {verified: true }}, {new: true}, function(err, task) {
+        if (err)
+            res.send(err);
+        res.json(task);
+    });
+}

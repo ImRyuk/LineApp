@@ -4,6 +4,8 @@ const express = require('express'),
     mongoose = require('mongoose'),
     User = require('./api/models/userModel'), //created model loading here
     Shop = require('./api/models/shopModel');
+    Reward = require('./api/models/rewardModel');
+    Visit = require('./api/models/visitModel');
     bodyParser = require('body-parser');
 
 // mongoose instance connection url connection
@@ -26,6 +28,8 @@ app.use(bodyParser.json());
 
 require("./api/routes/userRoutes")(app);
 require('./api/routes/shopRoutes')(app);
+require('./api/routes/rewardRoutes')(app);
+require('./api/routes/visitRoutes')(app);
 
 app.listen(port);
 
