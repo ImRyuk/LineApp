@@ -3,6 +3,9 @@ module.exports = function(app) {
 
     // shop Routes
 
+    app.route('/add')
+        .post(shops.add_shop);
+
     app.route('/shops')
         .get(shops.list_all_shops)
         .post(shops.create_a_shop);

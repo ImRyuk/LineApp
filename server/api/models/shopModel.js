@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const geocoder = require('../../utils/geocoder');
 
 const ShopSchema = new Schema({
     verified: {
@@ -8,7 +8,7 @@ const ShopSchema = new Schema({
         default: false
     },
     siret_number: {
-        type: "Number",
+        type: "String",
         required: 'Please enter a valid siret number',
         maxlength: 9,
         minlength: 9,
@@ -16,20 +16,37 @@ const ShopSchema = new Schema({
     },
     name: {
         type: String,
-        required: `Please enter the shop's name`
+        required: [true, `Please enter the shop's name`]
+    },
+    location:{
+        type: {
+            type: String,
+            enum: ['Point']
+        },
+        coordinates: {
+            type: [Number],
+            index: '2dsphere'
+        },
+        streetName:String,
+        streetNumber:String,
+        country:String,
+        city: String,
+        state:String,
+        zipcode: String
     },
     adress_name: {
         type: String,
-        required: `Please enter your address name`
+        required: [true, `Please enter your address name`]
     },
-    adress_number: {
-        type: String,
-        required: `Please enter your address number`
+    city: {
+        type:String,
+        required: [true, `Please enter your city`]
     },
     zip_code: {
-        type: Number,
+        type: "String",
         maxlength: 5,
-        required: `Please enter your zip code`
+        required: [true, `Please enter your zip code`]
+
     },
     merchant:{
         type: mongoose.Schema.Types.ObjectId,
@@ -40,6 +57,32 @@ const ShopSchema = new Schema({
     },
 },{
     timestamps: true
+});
+
+//Geocode & create location
+
+ShopSchema.pre('save', async function(next){
+    const loc = await geocoder.geocode({
+        address: this.adress_name,
+        zipcode: this.zip_code,
+        city: this.city
+    });
+    this.location = {
+        type: 'Point',
+        coordinates: [loc[0].latitude, loc[0].longitude],
+        streetName:loc[0].streetName,
+        streetNumber:loc[0].streetNumber,
+        country:loc[0].country,
+        city: loc[0].city,
+        state:loc[0].state,
+        zipcode: loc[0].zipcode
+    }
+
+    this.adress_name = undefined;
+    this.zip_code = undefined;
+    this.city = undefined;
+    next();
+    console.log(loc);
 });
 
 module.exports = mongoose.model('Shops', ShopSchema);

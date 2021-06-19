@@ -2,16 +2,19 @@ const express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
     mongoose = require('mongoose'),
-    User = require('./api/models/userModel'), //created model loading here
-    Shop = require('./api/models/shopModel');
-    Reward = require('./api/models/rewardModel');
-    Visit = require('./api/models/visitModel');
+    cors = require('cors'),
     bodyParser = require('body-parser');
 
-// mongoose instance connection url connection
+require('dotenv').config();
+require('./api/models/userModel');
+require('./api/models/shopModel');
+require('./api/models/rewardModel');
+require('./api/models/visitModel');
+require('path');
+
 mongoose.Promise = global.Promise;
 mongoose
-    .connect('mongodb+srv://admin-line:AdminLine@cluster0.9tjaf.mongodb.net/LineDatabase?retryWrites=true&w=majority', {
+    .connect(process.env.DB_HOST, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
@@ -25,12 +28,13 @@ mongoose
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 require("./api/routes/userRoutes")(app);
 require('./api/routes/shopRoutes')(app);
 require('./api/routes/rewardRoutes')(app);
 require('./api/routes/visitRoutes')(app);
 
-app.listen(port);
+app.listen(process.env.PORT);
 
 console.log('APP Line API server started on: ' + port);

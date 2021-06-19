@@ -24,20 +24,19 @@ exports.create_a_shop = async (req, res) => {
             siret_number:req.body.siret_number,
             name:req.body.name,
             adress_name: req.body.adress_name,
-            adress_number: req.body.adress_number,
             zip_code: req.body.zip_code,
             merchant: req.body.merchant,
             type: req.body.type,
-            verified: req.body.verified
+            verified: req.body.verified,
+            city: req.body.city
         });
-
-        user.shops.push(shop);
-        await User.findByIdAndUpdate(user._id, {shops: user.shops});
 
         // Save User in the database
         shop
             .save()
-            .then(data => {
+            .then(async (data) => {
+                user.shops.push(shop);
+                await User.findByIdAndUpdate(user._id, {shops: user.shops});
                 res.send(data);
             })
             .catch(err => {
@@ -89,4 +88,17 @@ exports.search_shops = function(req, res) {
             res.send(err);
         res.json(task);
     });
+};
+
+exports.add_shop = async (req, res, next) => {
+    try {
+        const store = await Shop.create(req.body);
+        return res.status(200).json({
+            success: true,
+            data: store
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({error: 'Server error'});
+    }
 };
