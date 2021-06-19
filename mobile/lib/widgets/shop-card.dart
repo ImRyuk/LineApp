@@ -15,6 +15,7 @@ class ShopCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           showModalBottomSheet(
+              isScrollControlled: true,
               context: context,
               builder: (context) {
                 return DetailCard(shop: shop);
