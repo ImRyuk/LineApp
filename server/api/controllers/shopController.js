@@ -109,5 +109,7 @@ exports.isOpen =  async function (req, res) {
         if(now < hours[compare][0] || now > hours[compare][1] || now < hours[compare][2] || now > hours[compare][3]){
             return res.json(`Magasin fermé!`) ;
         }
+    } else {
+        return res.json(`Magasin ouvert!`) ;
     }
 }
