@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';

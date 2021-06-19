@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:line/services/size_config.dart';
 
 import 'blocs/search/search_bloc.dart';
 import 'env/env.dart';

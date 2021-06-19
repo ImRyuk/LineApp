@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line/blocs/search/search_bloc.dart';
 import 'package:line/services/size_config.dart';
-import 'package:line/style/colors.dart';
 import 'package:line/widgets/shop-card.dart';
 
 class SearchScreen extends StatefulWidget {
