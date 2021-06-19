@@ -37,6 +37,7 @@ class _DetailCardState extends State<DetailCard> {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.safeBlockHorizontal * 100,
+      height: SizeConfig.blockSizeVertical * 80,
       padding: EdgeInsets.all(10),
       child: Container(
           decoration: BoxDecoration(
@@ -49,7 +50,7 @@ class _DetailCardState extends State<DetailCard> {
                     spreadRadius: 0,
                     offset: Offset(0, 2))
               ]),
-          child: ListView(
+          child: Column(
             children: [_getDesc(), _getBody()],
           )),
     );
