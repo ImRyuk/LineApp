@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
+import 'package:line/style/colors.dart';
+import 'package:line/widgets/graph.dart';
 
 class DetailCard extends StatefulWidget {
   final Shop shop;
@@ -10,72 +15,180 @@ class DetailCard extends StatefulWidget {
   _DetailCardState createState() => _DetailCardState();
 }
 
-bool isFavorite (){
-
-//TODO: faire la fonction qui vérifie dans le local storage si le shop est dans le local storage
-  return false;
-}
-
-void saveToFavorite(){
-  //TODO: faire la fonction qui sauvegarde le shop dans le localstorage
-}
-
 class _DetailCardState extends State<DetailCard> {
+  bool isFavorite() {
+//TODO: faire la fonction qui vérifie dans le local storage si le shop est dans le local storage
+    return false;
+  }
+
+  String getWaitingTime() {
+    return "10 min";
+  }
+
+  void saveToFavorite() {
+    //TODO: faire la fonction qui sauvegarde le shop dans le localstorage
+  }
+
+  void removeFromFavorite() {
+    //TODO: faire la fonction qui retire le shop dans le localstorage
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.safeBlockHorizontal * 100,
-      //height: MediaQuery.of(context).size.height / 5,
       padding: EdgeInsets.all(10),
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 2,
-                  spreadRadius: 0,
-                  offset: Offset(0, 2))
-            ]),
-        child: Column(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 2,
+                    spreadRadius: 0,
+                    offset: Offset(0, 2))
+              ]),
+          child: ListView(
+            children: [_getDesc(), _getBody()],
+          )),
+    );
+  }
+
+  Widget _getDesc() {
+    return Row(
+      children: [
+        Container(
+            width: SizeConfig.safeBlockHorizontal * 30,
+            child: Image.asset('assets/images/carrefour.png')),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Container(
-                  width: SizeConfig.safeBlockHorizontal * 25,
-                  child: Image.asset('assets/images/carrefour.png')),
-                Text(
-                  "A 5.2KM",
-                  style: TextStyle(
-                      fontFamily: "Baloo",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.shop.name!,
+                      style: TextStyle(fontFamily: "Baloo", fontSize: 24),
+                    ),
+                    Text(
+                      widget.shop.type!,
+                      style: TextStyle(
+                          fontFamily: "Baloo",
+                          color: Colors.black54,
+                          fontSize: 12),
+                    ),
+                    Text(
+                      widget.shop.city!,
+                      style: TextStyle(fontFamily: "Baloo", fontSize: 12),
+                    ),
+                    Text(
+                      widget.shop.address!,
+                      style: TextStyle(fontFamily: "Baloo", fontSize: 12),
+                    ),
+                  ],
                 ),
-                IconButton(icon: Icon(isFavorite() ? Icons.favorite : Icons.favorite_border), onPressed: saveToFavorite, )
+                Container(width: SizeConfig.blockSizeHorizontal * 10,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        "A 5.2KM",
+                        style: TextStyle(
+                            fontFamily: "Baloo",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isFavorite()
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: MyTheme.secondaryColor,
+                        size: SizeConfig.blockSizeHorizontal * 10,
+                      ),
+                      onPressed: saveToFavorite,
+                    )
+                  ],
+                )
               ],
             ),
-            Text(
-              widget.shop.name!,
-              style: TextStyle(fontFamily: "Baloo", fontSize: 18),
-            ),
-            Text(
-              widget.shop.type!,
-              style: TextStyle(
-                  fontFamily: "Baloo", color: Colors.black54, fontSize: 12),
-            ),
-            Text(
-              widget.shop.city!,
-              style: TextStyle(fontFamily: "Baloo", fontSize: 12),
-            ),
-            Text(
-              widget.shop.address!,
-              style: TextStyle(fontFamily: "Baloo", fontSize: 12),
-            )
+            _getOpen(),
+            _getReward()
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _getOpen() {
+    DateTime now = DateTime.now();
+    //TODO: finir la fonction qui vérifie si le magasin est ouvert ou non
+
+    return Text(
+      "Actuellement ouvert - ferme à 22h",
+      style: TextStyle(fontFamily: "Baloo", fontSize: 14, color: Colors.green),
+    );
+  }
+
+  Widget _getReward() {
+    //TODO: verifier qu'il y a des récompenses sinon return Container()
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: MyTheme.secondaryColor),
+          borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        children: [
+          Icon(
+            CupertinoIcons.gift,
+            color: MyTheme.darkPurple,
+          ),
+          Text("Ce magasin offre des récompenses",
+              style: TextStyle(
+                  fontFamily: "Baloo",
+                  fontSize: 12,
+                  color: MyTheme.secondaryColor)),
+        ],
       ),
+    );
+  }
+
+  Widget _getBody() {
+    return Column(
+      children: [
+        Text(
+          "Affluence:",
+          style: TextStyle(fontFamily: "Baloo", fontSize: 18),
+        ),
+        Graph(),
+        Text(
+          "Temps d'attente estimé : " + getWaitingTime(),
+          style: TextStyle(fontFamily: "Baloo", fontSize: 18),
+        ),
+        TextButton(
+            onPressed: () {
+              BlocProvider.of<VisitBloc>(context).add(VisitStart(widget.shop));
+            },
+            child: Container(
+              width: SizeConfig.safeBlockHorizontal * 75,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                  color: MyTheme.secondaryColor,
+                  borderRadius: BorderRadius.circular(18)),
+              child: Center(
+                child: Text(
+                  "Je suis là",
+                  style: TextStyle(
+                      fontFamily: "Baloo", fontSize: 24, color: Colors.white),
+                ),
+              ),
+            ))
+      ],
     );
   }
 }

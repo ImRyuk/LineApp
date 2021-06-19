@@ -29,7 +29,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchLaunch event,
   ) async* {
     yield SearchLoading();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 0));
     List<Shop> shops = await shopProvider.getManyFromKeyword(event.search);
     yield SearchLoaded(shops: shops);
   }
