@@ -2,10 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
 
-class DetailCard extends StatelessWidget {
+class DetailCard extends StatefulWidget {
   final Shop shop;
   const DetailCard({required this.shop});
 
+  @override
+  _DetailCardState createState() => _DetailCardState();
+}
+
+bool isFavorite (){
+
+//TODO: faire la fonction qui vérifie dans le local storage si le shop est dans le local storage
+  return false;
+}
+
+void saveToFavorite(){
+  //TODO: faire la fonction qui sauvegarde le shop dans le localstorage
+}
+
+class _DetailCardState extends State<DetailCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,24 +52,25 @@ class DetailCard extends StatelessWidget {
                       fontFamily: "Baloo",
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
-                )
+                ),
+                IconButton(icon: Icon(isFavorite() ? Icons.favorite : Icons.favorite_border), onPressed: saveToFavorite, )
               ],
             ),
             Text(
-              shop.name!,
+              widget.shop.name!,
               style: TextStyle(fontFamily: "Baloo", fontSize: 18),
             ),
             Text(
-              shop.type!,
+              widget.shop.type!,
               style: TextStyle(
                   fontFamily: "Baloo", color: Colors.black54, fontSize: 12),
             ),
             Text(
-              shop.city!,
+              widget.shop.city!,
               style: TextStyle(fontFamily: "Baloo", fontSize: 12),
             ),
             Text(
-              shop.address!,
+              widget.shop.address!,
               style: TextStyle(fontFamily: "Baloo", fontSize: 12),
             )
           ],
