@@ -62,6 +62,19 @@ class Shop extends Equatable {
         type = json['type'],
         hours = json['hours'];
 
+    Map<String, dynamic> toJson() => {
+        'id': id,
+        'verified': verified,
+        'name': name,
+        'city': city,
+        'address': address,
+        'logoUrl': logoUrl,
+        'position': position,
+        'idUser': idUser,
+        'type': type,
+        'hours': hours
+      };
+
   @override
   String toString() {
     return 'Shop { id: $id,' + ' | name: $name' + ' | address: $address}';
