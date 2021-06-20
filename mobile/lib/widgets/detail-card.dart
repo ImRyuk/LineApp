@@ -174,7 +174,7 @@ class _DetailCardState extends State<DetailCard> {
           "Affluence:",
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
-        Graph(),
+        Graph(shop: widget.shop,),
         Text(
           "Temps d'attente estimé : " + getWaitingTime(),
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
