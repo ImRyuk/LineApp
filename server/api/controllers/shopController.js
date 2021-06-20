@@ -1,8 +1,8 @@
 const mongoose = require('mongoose'),
     Shop = mongoose.model('Shops');
 const User = mongoose.model('Users');
+const Visit = mongoose.model('Visits');
 const day = require('../../utils/day');
-
 
 exports.list_all_shops = function(req, res) {
     Shop.find({}, function(err, task) {
@@ -107,9 +107,18 @@ exports.isOpen =  async function (req, res) {
         return res.json(`Magasin fermé aujourd'hui!`) ;
     } else if (hours[compare].length >= 1 && hours[compare].length <= 4 ) {
         if(now < hours[compare][0] || now > hours[compare][1] || now < hours[compare][2] || now > hours[compare][3]){
-            return res.json(`Magasin fermé!`) ;
+            return res.json("Magasin fermé!") ;
         }
     } else {
-        return res.json(`Magasin ouvert!`) ;
+        return res.json("Magasin ouvert!") ;
     }
+}
+
+exports.waitTime = async function (req, res) {
+   // let shop = await Shop.findOne({_id: req.params.shopId});
+
+    let visits = await Visit.find({shop: req.params.shopId});
+
+    console.log(visits);
+
 }

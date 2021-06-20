@@ -12,6 +12,9 @@ module.exports = function(app) {
         .put(shops.update_a_shop)
         .delete(shops.delete_a_shop);
 
+    app.route('/search/shops/waitTime/:shopId')
+        .get(shops.waitTime);
+
     app.route('/search/shops/isOpen/:shopId')
         .get(shops.isOpen);
 

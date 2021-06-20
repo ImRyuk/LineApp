@@ -1,30 +1,32 @@
+const moment = require('moment');
+
 const mongoose = require('mongoose'),
     Visit = mongoose.model('Visits');
-
 
 exports.list_all_visits = function(req, res) {
     Visit.find({}, function(err, task) {
         if (err)
             res.send(err);
-        res.json(task);
+        else{
+            console.log(moment().format('DD'))
+            const data = task.map(obj => ({
+                start: moment( obj.start_visit ).format(), end: moment( obj.end_visit ).format(), shop: obj.shop
+            }));
+            res.json(data);
+        }
     });
 };
 
 exports.create_a_visit = async (req, res) => {
 
-        // Create a Shop
+    // Create a Shop
     let visit = new Visit({
-        siret_number: req.body.siret_number,
-        name: req.body.name,
-        adress_name: req.body.adress_name,
-        adress_number: req.body.adress_number,
-        zip_code: req.body.zip_code,
-        merchant: req.body.merchant,
-        type: req.body.type,
-        verified: req.body.verified
+        start_visit: new Date(req.body.start),
+        end_visit: new Date(req.body.end),
+        shop: req.body.shop
     });
 
-        // Save User in the database
+        // Save Visit in the database
         visit
             .save()
             .then(data => {
@@ -56,7 +58,7 @@ exports.update_a_visit = function(req, res) {
 
 exports.delete_a_visit = async function (req, res) {
 
-    let shop = await Visit.findOne({_id: req.params.visitId});
+    let visit = await Visit.findOne({_id: req.params.visitId});
 
     Visit.deleteOne({
         _id: req.params.visitId
