@@ -52,6 +52,36 @@ const ShopSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    hours: {
+        lundi: {
+            type: Array,
+            default: []
+        },
+        mardi: {
+            type: Array,
+            default: []
+        },
+        mercredi: {
+            type: Array,
+            default: []
+        },
+        jeudi: {
+            type: Array,
+            default: []
+        },
+        vendredi: {
+            type: Array,
+            default: []
+        },
+        samedi: {
+            type: Array,
+            default: []
+        },
+        dimanche: {
+            type: Array,
+            default: []
+        }
+    },
     type:{
       type: String
     },

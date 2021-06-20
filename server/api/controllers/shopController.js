@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'),
     Shop = mongoose.model('Shops');
 const User = mongoose.model('Users');
+const day = require('../../utils/day');
 
 
 exports.list_all_shops = function(req, res) {
@@ -28,7 +29,8 @@ exports.create_a_shop = async (req, res) => {
             merchant: req.body.merchant,
             type: req.body.type,
             verified: req.body.verified,
-            city: req.body.city
+            city: req.body.city,
+            hours: req.body.hours
         });
 
         // Save User in the database
@@ -90,15 +92,24 @@ exports.search_shops = function(req, res) {
     });
 };
 
-exports.add_shop = async (req, res, next) => {
-    try {
-        const store = await Shop.create(req.body);
-        return res.status(200).json({
-            success: true,
-            data: store
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({error: 'Server error'});
+exports.isOpen =  async function (req, res) {
+    let shop = await Shop.findOne({_id: req.params.shopId});
+
+    let hours = shop.hours;
+
+    let d = new Date();
+    let n = d.getDay();
+    let now = d.getHours() + "." + d.getMinutes();
+
+    let compare = day(n);
+
+    if(hours[compare].length === 0){
+        return res.json(`Magasin fermé aujourd'hui!`) ;
+    } else if (hours[compare].length >= 1 && hours[compare].length <= 4 ) {
+        if(now < hours[compare][0] || now > hours[compare][1] || now < hours[compare][2] || now > hours[compare][3]){
+            return res.json(`Magasin fermé!`) ;
+        }
+    } else {
+        return res.json(`Magasin ouvert!`) ;
     }
-};
+}
