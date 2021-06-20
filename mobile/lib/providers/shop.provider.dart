@@ -13,55 +13,11 @@ class ShopProvider {
 
   Future<List<Shop>> getManyFromKeyword(String search) async {
     try {
-      List<Shop> shops = [
-        Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-                Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-                Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-        Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-        Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-        Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        ),
-        Shop(
-          name: "Carrefour Express",
-          city: "Paris XVI",
-          address: "64 rue des Poulains",
-          type: "Alimentation Générale",
-        )
-      ];
-
-      return shops;
-      // Response response = await this.api.get(path, query: {"q": search});
-      // return _convertRawListToObject(response);
+      Response response = await this.api.get(path);
+      print(response.body);
+      return _convertRawListToObject(response);
     } catch (e) {
+      print(e);
       throw Exception("Erreur de chargement des shop");
     }
   }

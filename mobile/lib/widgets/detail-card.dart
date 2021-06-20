@@ -67,54 +67,63 @@ class _DetailCardState extends State<DetailCard> {
           children: [
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.shop.name!,
-                      style: TextStyle(fontFamily: "Baloo", fontSize: 24),
-                    ),
-                    Text(
-                      widget.shop.type!,
-                      style: TextStyle(
-                          fontFamily: "Baloo",
-                          color: Colors.black54,
-                          fontSize: 12),
-                    ),
-                    Text(
-                      widget.shop.city!,
-                      style: TextStyle(fontFamily: "Baloo", fontSize: 12),
-                    ),
-                    Text(
-                      widget.shop.address!,
-                      style: TextStyle(fontFamily: "Baloo", fontSize: 12),
-                    ),
-                  ],
-                ),
-                Container(width: SizeConfig.blockSizeHorizontal * 10,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        "A 5.2KM",
+                Container(
+                  width: SizeConfig.safeBlockHorizontal * 45,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.shop.name!,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontFamily: "Baloo", fontSize: 24),
+                      ),
+                      Text(
+                        widget.shop.type!,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontFamily: "Baloo",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                            color: Colors.black54,
+                            fontSize: 12),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        isFavorite()
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: MyTheme.secondaryColor,
-                        size: SizeConfig.blockSizeHorizontal * 10,
+                      Text(
+                        widget.shop.location!["city"],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontFamily: "Baloo", fontSize: 12),
                       ),
-                      onPressed: saveToFavorite,
-                    )
-                  ],
+                      Text(
+                        widget.shop.location!["streetNumber"] +
+                            " " +
+                            widget.shop.location!["streetName"],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontFamily: "Baloo", fontSize: 12),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: SizeConfig.safeBlockHorizontal * 15,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          "A 5.2KM",
+                          style: TextStyle(
+                              fontFamily: "Baloo",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          isFavorite() ? Icons.favorite : Icons.favorite_border,
+                          color: MyTheme.secondaryColor,
+                          size: SizeConfig.safeBlockHorizontal * 10,
+                        ),
+                        onPressed: saveToFavorite,
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

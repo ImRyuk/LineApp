@@ -1,95 +1,84 @@
 import 'package:equatable/equatable.dart';
 
 class Shop extends Equatable {
-  final int? id;
-  final String? verified;
+  final String? id;
+  final bool? verified;
+  final String? siretNumber;
   final String? name;
-  final String? city;
-  final String? address;
-  final String? logoUrl;
-  final List<double>? position;
-  final int? idUser;
+  final Map<String, dynamic>? location;
+  final String? merchantId;
   final String? type;
-  final List<DateTime>? hours;
+  final Map<String, dynamic>? hours;
 
   const Shop({
     this.id,
     this.verified,
+    this.siretNumber,
+    this.location,
+    this.merchantId,
     this.name,
-    this.city,
-    this.address,
-    this.logoUrl,
-    this.position,
-    this.idUser,
     this.type,
     this.hours,
   });
 
   Shop copyWith(
-      {int? id,
-      String? verified,
+      {String? id,
+      bool? verified,
+      String? siretNumber,
       String? name,
-      String? city,
-      String? address,
-      String? logoUrl,
-      List<double>? position,
-      int? idUser,
+      Map<String, dynamic>? location,
+      String? merchantId,
       String? type,
-      List<DateTime>? hours}) {
+      Map<String, dynamic>? hours}) {
     return Shop(
       id: id ?? this.id,
       verified: verified ?? this.verified,
+      siretNumber: siretNumber ?? this.siretNumber,
       name: name ?? this.name,
-      city: city ?? this.city,
-      address: address ?? this.address,
-      logoUrl: logoUrl ?? this.logoUrl,
-      position: position ?? this.position,
-      idUser: idUser ?? this.idUser,
+      location: location ?? this.location,
+      merchantId: merchantId ?? this.merchantId,
       type: type ?? this.type,
       hours: hours ?? this.hours,
     );
   }
 
   Shop.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
+      : id = json['_id'],
         verified = json['verified'],
+        siretNumber = json['siret_number'],
         name = json['name'],
-        city = json['city'],
-        address = json['address'],
-        logoUrl = json['logoUrl'],
-        position = json['position'],
-        idUser = json['idUser'],
+        location = json['location'],
+        merchantId = json['merchant'],
         type = json['type'],
         hours = json['hours'];
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
+        //TODO:pas fini
         'id': id,
         'verified': verified,
         'name': name,
-        'city': city,
-        'address': address,
-        'logoUrl': logoUrl,
-        'position': position,
-        'idUser': idUser,
         'type': type,
         'hours': hours
       };
 
   @override
   String toString() {
-    return 'Shop { id: $id,' + ' | name: $name' + ' | address: $address}';
+    return 'Shop { id: $id,' +
+        ' | name: $name' +
+        ' | location: $location ' +
+        ' | merchantId: $merchantId ' +
+        ' | type: $type ' +
+        ' | type: $hours }';
   }
 
   @override
   List<Object?> get props => [
         this.id,
         this.verified,
+        this.siretNumber,
+        this.location,
+        this.merchantId,
         this.name,
-        this.city,
-        this.address,
-        this.logoUrl,
-        this.position,
-        this.idUser,
         this.type,
         this.hours,
       ];

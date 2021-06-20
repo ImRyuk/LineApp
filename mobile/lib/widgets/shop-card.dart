@@ -51,6 +51,7 @@ class ShopCard extends StatelessWidget {
               ),
               Text(
                 shop.name!,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontFamily: "Baloo", fontSize: 18),
               ),
               Text(
@@ -59,11 +60,11 @@ class ShopCard extends StatelessWidget {
                     fontFamily: "Baloo", color: Colors.black54, fontSize: 12),
               ),
               Text(
-                shop.city!,
+                shop.location!["city"],
                 style: TextStyle(fontFamily: "Baloo", fontSize: 12),
               ),
               Text(
-                shop.address!,
+                shop.location!["streetNumber"] + " " + shop.location!["streetName"],
                 style: TextStyle(fontFamily: "Baloo", fontSize: 12),
               )
             ],
