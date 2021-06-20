@@ -4,14 +4,14 @@ const dev = {
   'api_authority': 'http',
   'api_endpoint': '127.0.0.1',
   'api_port': 3000,
-  'api_path': '/api',
+  'api_path': '',
 };
 
 const prod = {
   'api_authority': 'http',
   'api_endpoint': '127.0.0.1',
   'api_port': 3000,
-  'api_path': '/api',
+  'api_path': '',
 };
 
 const env = (stage == 'prod' ? prod : dev);
