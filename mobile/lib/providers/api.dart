@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
@@ -54,7 +53,7 @@ class Api {
           queryParameters: query);
       http.Response resp = await client.post(
         signedUrl,
-        body: json.encode(body),
+        body: body,
       );
       if (resp.statusCode >= 400 && resp.statusCode < 500) {
         throw Exception(resp.body);
