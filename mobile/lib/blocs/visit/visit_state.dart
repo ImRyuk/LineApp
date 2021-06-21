@@ -15,7 +15,8 @@ class VisitUninitialized extends VisitState {
 }
 
 class VisitStarted extends VisitState {
-  VisitStarted();
+  final Visit visit;
+  VisitStarted({required this.visit});
 
   @override
   String toString() => 'VisitStarted';
