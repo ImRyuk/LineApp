@@ -50,7 +50,7 @@ class _DetailCardState extends State<DetailCard> {
                     spreadRadius: 0,
                     offset: Offset(0, 2))
               ]),
-          child: Column(
+          child: ListView(
             children: [_getDesc(), _getBody()],
           )),
     );
@@ -137,12 +137,60 @@ class _DetailCardState extends State<DetailCard> {
 
   Widget _getOpen() {
     DateTime now = DateTime.now();
-    //TODO: finir la fonction qui vérifie si le magasin est ouvert ou non
-
-    return Text(
-      "Actuellement ouvert - ferme à 22h",
-      style: TextStyle(fontFamily: "Baloo", fontSize: 14, color: Colors.green),
-    );
+    List<dynamic> hours;
+    switch (now.weekday) {
+      case 1:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 2:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 3:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 4:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 5:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 6:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      case 7:
+        hours = widget.shop.hours!['lundi'];
+        break;
+      default:
+        hours = [];
+        break;
+    }
+    if (hours.length == 0)
+      return Text("Actuellement ouvert - ferme à 22h",
+          style: TextStyle(
+              fontFamily: "Baloo", fontSize: 14, color: Colors.green));
+    if (hours.length == 2) {
+      if (now.hour >= hours[0] && now.hour < hours[1]) {
+        return Text('Actuellement ouvert - ferme à ${hours[1]}h',
+            style: TextStyle(
+                fontFamily: "Baloo", fontSize: 14, color: Colors.green));
+      } else {
+        return Text('Actuellement fermé',
+            style: TextStyle(
+                fontFamily: "Baloo", fontSize: 14, color: Colors.red));
+      }
+    }
+    if (hours.length == 4) {
+      if ((now.hour >= hours[0] && now.hour < hours[1]) || (now.hour >= hours[2] && now.hour < hours[3])) {
+        return Text('Actuellement ouvert - ferme à ${hours[3]}h',
+            style: TextStyle(
+                fontFamily: "Baloo", fontSize: 14, color: Colors.green));
+      } else {
+        return Text('Actuellement fermé',
+            style: TextStyle(
+                fontFamily: "Baloo", fontSize: 14, color: Colors.red));
+      }
+    }
+    else return Container();
   }
 
   Widget _getReward() {
@@ -168,20 +216,27 @@ class _DetailCardState extends State<DetailCard> {
   }
 
   Widget _getBody() {
+    VisitState visitState = context.watch<VisitBloc>().state;
     return Column(
       children: [
         Text(
           "Affluence:",
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
-        Graph(shop: widget.shop,),
+        Graph(
+          shop: widget.shop,
+        ),
         Text(
           "Temps d'attente estimé : " + getWaitingTime(),
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
         TextButton(
             onPressed: () {
-              BlocProvider.of<VisitBloc>(context).add(VisitStart(widget.shop));
+              visitState is VisitStarted
+                  ? BlocProvider.of<VisitBloc>(context)
+                      .add(VisitFinish(visit: visitState.visit))
+                  : BlocProvider.of<VisitBloc>(context)
+                      .add(VisitStart(widget.shop));
             },
             child: Container(
               width: SizeConfig.safeBlockHorizontal * 75,
@@ -192,7 +247,7 @@ class _DetailCardState extends State<DetailCard> {
                   borderRadius: BorderRadius.circular(18)),
               child: Center(
                 child: Text(
-                  "Je suis là",
+                  visitState is VisitStarted ? "Je suis parti" : "Je suis là",
                   style: TextStyle(
                       fontFamily: "Baloo", fontSize: 24, color: Colors.white),
                 ),

@@ -31,8 +31,8 @@ class Visit extends Equatable {
 
   Map<String, dynamic> toJson() => {
         'shop': shopId,
-        'start': startDate,
-        'end': endDate,
+        'start': startDate!.toIso8601String(),
+        'end': endDate!.toIso8601String(),
       };
 
   @override
