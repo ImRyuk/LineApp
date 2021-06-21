@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+:root {
+    --pink: #F72585;
+    --purple: #30044E;
+    --lilac: #AD8DF6;
+    --blue: #4CC9F0;
+    --header-height : 45px;
+  }
+
+.text-blue {color:var(--blue)}
+.text-pink {color:var(--pink)}
+.text-purple {color:var(--purple)}
+
+.center {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+h1 {font-size: 1.2em;}
+h2 {font-size: 1.1em;}
+
+
+.section-not-connected {
+    height : calc(100vh - var(--header-height));
+    width: calc(100vw - 20%);
+
+    background-image: url('./assets/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding : 0 10%;
+}
+
+.section-connected {
+    min-height : calc(100vh - var(--header-height));
+    width: 100vw;
+    display: flex;
+}
+
+app-side-menu {
+    width: 20%;
+    min-width: 200px;
+}
+
+
+.button-simple {
+    width : 100px;
+    border-radius: 50px;
+    border: 1px solid white;
+    background-color: var(--blue);
+    text-transform:uppercase;
+    padding : 8px 15px;
+    color: white;
+    font-weight: bold;
+}
+
+.button-slim {
+    font-size: 0.8em;
+    width : 100px;
+    border-radius: 50px;
+    border: 1px solid white;
+    background-color: var(--blue);
+    padding : 8px 15px;
+    color: white;
+    font-weight: bold;
+}
+
+.button-large {
+    width : 90%;
+    border-radius: 50px;
+    border: 1px solid white;
+    background-color: var(--blue);
+    text-transform:uppercase;
+    padding : 8px 15px;
+    color: white;
+    font-weight: bold;
+}
+
+.large-input {
+    border: none;
+    border-bottom: 2px solid var(--blue);
+    border-left: 0.5px solid var(--blue);
+    box-shadow: 2px -1px 2px gray;
+    padding: 10px 5px;
+}
+
+.input {
+    border: none;
+    border-bottom: 2px solid var(--blue);
+    border-left: 0.5px solid var(--blue);
+    box-shadow: 2px -1px 2px gray;
+    padding: 6px 5px;
+}
+
+.slim-input {
+    border: none;
+    border-bottom: 2px solid var(--blue);
+    border-left: 0.5px solid var(--blue);
+    box-shadow: 2px -1px 2px gray;
+    padding: 2px 0;
+}

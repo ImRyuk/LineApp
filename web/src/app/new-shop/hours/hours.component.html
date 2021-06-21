@@ -1,0 +1,31 @@
+<div class='day-choice' [formGroup]="form"  >
+    <div>
+        <input type="checkbox" name='{{day}}' formControlName="{{day}}">
+        <label for='{{day}}'>{{this.jour}}</label>
+    </div>
+
+    <div>
+        <select class='slim-input'  name="{{day}}-choice-1" formControlName="{{day}}-choice-1">
+            <option *ngFor="let hour of hours" value="{{hour}}">{{hour}}h</option>
+        </select>
+        <span> - </span>
+        <select class='slim-input'  name="{{day}}-choice-2" formControlName="{{day}}-choice-2">
+            <option *ngFor="let hour of hours" value="{{hour}}">{{hour}}h</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="checkbox" name='{{day}}-coupure' formControlName="{{day}}-coupure">
+        <label for='{{day}}-coupure'>avec coupure</label>
+    </div>
+    
+    <div>
+        <select class='slim-input'  name="{{day}}-choice-3" formControlName="{{day}}-choice-3">
+            <option *ngFor="let hour of hours" value="{{hour}}">{{hour}}h</option>
+        </select>
+        <span> - </span>
+        <select class='slim-input'  name="{{day}}-choice-4" formControlName="{{day}}-choice-4">
+            <option *ngFor="let hour of hours" value="{{hour}}">{{hour}}h</option>
+        </select>
+    </div>
+</div>

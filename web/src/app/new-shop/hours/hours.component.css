@@ -1,0 +1,24 @@
+.day-choice {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 3%;
+}
+
+.day-choice>div {
+    display: flex;
+    align-items: center;
+    gap:10%;
+    
+}
+
+.day-choice label, .day-choice select, .day-choice option {
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.day-choice div:first-of-type label {
+    text-transform: capitalize;
+    width: 30px;
+    text-align: left;
+}

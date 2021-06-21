@@ -1,0 +1,50 @@
+<app-header></app-header>
+<section class='section-connected'>
+    <app-side-menu></app-side-menu>
+    <article id='dashboard-article' *ngIf="this.loginService.getCurrentUserRole()=='ROLE_MERCHANT'">
+        <h1 id="title">Dashboard</h1>
+        <p>Bienvenue sur votre dashboard ! Ci dessous vous trouverez l'ensemble de vos commerces inscrits ainsi que vos demandes en cours. En cliquant sur le détail, vous pourrez effectuez des modifications !</p>
+        <div id="all-shops" >
+            <div id='all-shops-left'>
+                <h2>Vos commerces</h2>
+                <div *ngFor="let shop of shops" id="shop-infos">
+                    <div id="shop-infos-left">
+                        <!-- <img *ngIf="this.shop.hasOwnProperty('image')" id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/> -->
+                        <!-- <img id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/> -->
+                    
+                        <h3 class="text-blue">{{shop.name}}</h3>
+
+                    </div>
+                    <div id="shop-infos-right">
+                        <button class='button-slim'  routerLink="/detail/{{shop.id}}">Voir détail</button>
+                    </div>
+                </div>
+            </div>
+            <div id='all-shops-right'>
+                <h2>Vos demandes</h2>
+                <div *ngFor="let shop of requests" id="shop-infos">
+                    <div id="shop-infos-left">
+                        <!-- <img *ngIf="this.shop.hasOwnProperty('image')" id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/> -->
+                        <!-- <img id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/> -->
+                    
+                        <h3 class="text-blue">{{shop.name}}</h3>
+
+                    </div>
+                    <div id="shop-infos-right">
+                        <button class='button-slim'  routerLink="/detail/{{shop._id}}">Voir détail</button>
+                    </div>
+      
+            
+           
+                </div>
+            </div>
+        </div>
+        
+   
+    </article>
+
+</section>
+
+
+
+
