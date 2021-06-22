@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:line/blocs/geolocate/geolocate_bloc.dart';
 import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
@@ -12,16 +14,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailCard extends StatefulWidget {
   final Shop shop;
-  const DetailCard({required this.shop});
+  final SharedPreferences prefs;
+  const DetailCard({required this.shop, required this.prefs});
 
   @override
   _DetailCardState createState() => _DetailCardState();
 }
 
 class _DetailCardState extends State<DetailCard> {
-  bool isFavorite() {
-//TODO: faire la fonction qui vérifie dans le local storage si le shop est dans le local storage
-    return false;
+  late bool shopIsFavorite;
+
+  void isFavorite() {
+    setState(() {
+      shopIsFavorite = false;
+    });
+
+    if (widget.prefs
+        .getStringList("favorites")!
+        .contains(json.encode(widget.shop.toJson())))
+      setState(() {
+        shopIsFavorite = true;
+      });
   }
 
   String getWaitingTime() {
@@ -29,19 +42,29 @@ class _DetailCardState extends State<DetailCard> {
   }
 
   void saveToFavorite() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if ((prefs.getStringList("favorites") == null) ||
-        (prefs.getStringList("favorites")!.isEmpty)) {
-      prefs.setStringList("favorites", [json.encode(widget.shop.toJson())]);
+    if ((widget.prefs.getStringList("favorites") == null) ||
+        (widget.prefs.getStringList("favorites")!.isEmpty)) {
+      widget.prefs
+          .setStringList("favorites", [json.encode(widget.shop.toJson())]);
     } else {
-      List<String>? fav = prefs.getStringList("favorites");
+      List<String>? fav = widget.prefs.getStringList("favorites");
       fav!.add(json.encode(widget.shop.toJson()));
-      prefs.setStringList("favorites", fav);
+      widget.prefs.setStringList("favorites", fav);
     }
+    isFavorite();
   }
 
   void removeFromFavorite() {
-    //TODO: faire la fonction qui retire le shop dans le localstorage
+    List<String> strings = widget.prefs.getStringList("favorites")!;
+    strings.remove(json.encode(widget.shop.toJson()));
+    widget.prefs.setStringList("favorites", strings);
+    isFavorite();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite();
   }
 
   @override
@@ -62,12 +85,27 @@ class _DetailCardState extends State<DetailCard> {
                     offset: Offset(0, 2))
               ]),
           child: ListView(
-            children: [_getDesc(), _getBody()],
+            children: [_getDesc(context), _getBody()],
           )),
     );
   }
 
-  Widget _getDesc() {
+  String getDistance(Position position) {
+    double distance = Geolocator.distanceBetween(
+            widget.shop.location!["coordinates"][0],
+            widget.shop.location!["coordinates"][1],
+            position.latitude,
+            position.longitude) /
+        1000;
+
+    return "A ${distance.toStringAsFixed(1)}KM";
+  }
+
+  Widget _getDesc(BuildContext context) {
+    GeolocateState geoState = context.watch<GeolocateBloc>().state;
+    if (geoState is GeolocateUninitialized) {
+      BlocProvider.of<GeolocateBloc>(context).add(GeolocateStart());
+    }
     return Row(
       children: [
         Container(
@@ -116,22 +154,29 @@ class _DetailCardState extends State<DetailCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          "A 5.2KM",
-                          style: TextStyle(
-                              fontFamily: "Baloo",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                      if (geoState is GeolocateLoading)
+                        CircularProgressIndicator(),
+                      if (geoState is GeolocateLoaded)
+                        Center(
+                          child: Text(
+                            getDistance(geoState.position),
+                            style: TextStyle(
+                                fontFamily: "Baloo",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          ),
                         ),
-                      ),
                       IconButton(
                         icon: Icon(
-                          isFavorite() ? Icons.favorite : Icons.favorite_border,
+                          shopIsFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: MyTheme.secondaryColor,
                           size: SizeConfig.safeBlockHorizontal * 10,
                         ),
-                        onPressed: saveToFavorite,
+                        onPressed: shopIsFavorite
+                            ? removeFromFavorite
+                            : saveToFavorite,
                       )
                     ],
                   ),
@@ -151,25 +196,25 @@ class _DetailCardState extends State<DetailCard> {
     List<dynamic> hours;
     switch (now.weekday) {
       case 1:
-        hours = widget.shop.hours!['monday'];
+        hours = widget.shop.hours!['monday'] ?? [];
         break;
       case 2:
-        hours = widget.shop.hours!['tuesday'];
+        hours = widget.shop.hours!['tuesday'] ?? [];
         break;
       case 3:
-        hours = widget.shop.hours!['wednesday'];
+        hours = widget.shop.hours!['wednesday'] ?? [];
         break;
       case 4:
-        hours = widget.shop.hours!['thursday'];
+        hours = widget.shop.hours!['thursday'] ?? [];
         break;
       case 5:
-        hours = widget.shop.hours!['friday'];
+        hours = widget.shop.hours!['friday'] ?? [];
         break;
       case 6:
-        hours = widget.shop.hours!['saturday'];
+        hours = widget.shop.hours!['saturday'] ?? [];
         break;
       case 7:
-        hours = widget.shop.hours!['sunday'];
+        hours = widget.shop.hours!['sunday'] ?? [];
         break;
       default:
         hours = [];

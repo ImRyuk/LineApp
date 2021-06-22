@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line/blocs/search/search_bloc.dart';
 import 'package:line/services/size_config.dart';
 import 'package:line/widgets/shop-card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen();
+  final SharedPreferences prefs;
+  const SearchScreen(this.prefs);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -43,6 +45,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: searchState.shops
                       .map((shop) => ShopCard(
                             shop: shop,
+                            prefs: widget.prefs
                           ))
                       .toList(),
                 ),

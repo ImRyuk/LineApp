@@ -18,13 +18,13 @@ class _HomeState extends State<Home> {
   Widget _getChildren(int index) {
     switch (index) {
       case 0:
-        return SearchScreen();
+        return SearchScreen(widget.prefs);
       case 1:
         return FavoriteScreen(widget.prefs);
       case 2:
         return RewardsScreen(widget.prefs);
       default:
-        return SearchScreen();
+        return SearchScreen(widget.prefs);
     }
   }
 
@@ -46,6 +46,11 @@ class _HomeState extends State<Home> {
       _currentIndex = index;
     });
   }
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

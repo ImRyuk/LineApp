@@ -36,10 +36,11 @@ class _RewardsScreenState extends State<RewardsScreen> {
         children: [
           Expanded(
             child: GridView.count(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               children: getRewards()
                   .map((shop) => RewardCard(
                         shop: shop,
+                        prefs: widget.prefs,
                       ))
                   .toList(),
             ),

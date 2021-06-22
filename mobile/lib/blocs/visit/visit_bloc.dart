@@ -44,13 +44,17 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
         50000) {
       if (event.shop.reward != null && event.shop.reward != "") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        if ((prefs.getStringList("rewards") == null) ||
-            (prefs.getStringList("rewards")!.isEmpty)) {
-          prefs.setStringList("rewards", [json.encode(event.shop.toJson())]);
-        } else {
-          List<String>? rewards = prefs.getStringList("rewards");
-          rewards!.add(json.encode(event.shop.toJson()));
-          prefs.setStringList("rewards", rewards);
+        if (!prefs
+            .getStringList("rewards")!
+            .contains(json.encode(event.shop.toJson()))) {
+          if ((prefs.getStringList("rewards") == null) ||
+              (prefs.getStringList("rewards")!.isEmpty)) {
+            prefs.setStringList("rewards", [json.encode(event.shop.toJson())]);
+          } else {
+            List<String>? rewards = prefs.getStringList("rewards");
+            rewards!.add(json.encode(event.shop.toJson()));
+            prefs.setStringList("rewards", rewards);
+          }
         }
       }
       Visit visit = Visit(shopId: event.shop.id, startDate: pos.timestamp);

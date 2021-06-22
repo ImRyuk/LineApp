@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line/blocs/geolocate/geolocate_bloc.dart';
 import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/providers/visit.provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,9 @@ Future<void> main() async {
   Bloc.observer = SimpleBlocDelegate();
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(prefs: prefs,));
+  runApp(MyApp(
+    prefs: prefs,
+  ));
 }
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -61,9 +64,12 @@ class MyApp extends StatelessWidget {
             create: (context) => VisitBloc(
                 api: RepositoryProvider.of<Api>(context),
                 visitProvider: RepositoryProvider.of<VisitProvider>(context)),
+          ),
+          BlocProvider<GeolocateBloc>(
+            create: (context) => GeolocateBloc(),
           )
         ],
-        child: Home(prefs:prefs),
+        child: Home(prefs: prefs),
       ),
     );
   }

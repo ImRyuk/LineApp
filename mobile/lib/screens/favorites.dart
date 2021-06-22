@@ -40,6 +40,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               children: getFavorites()
                   .map((shop) => ShopCard(
                         shop: shop,
+                        prefs: widget.prefs,
                       ))
                   .toList(),
             ),

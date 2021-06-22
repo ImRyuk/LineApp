@@ -14,7 +14,6 @@ class ShopProvider {
   Future<List<Shop>> getManyFromKeyword(String search) async {
     try {
       Response response = await this.api.get(path);
-      print(response.body);
       return _convertRawListToObject(response);
     } catch (e) {
       print(e);
