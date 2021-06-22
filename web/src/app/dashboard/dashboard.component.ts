@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   ) {
     console.log(this.loginService.getCurrentUser());
     this.getShops();
+    this.shopService.getAllVisits();
 
    
    }
@@ -30,9 +31,16 @@ export class DashboardComponent implements OnInit {
   }
 
   async getShops() {
-    this.shopList = await this.shopService.getShopListByUserId(this.loginService.getCurrentUser()._id);
+    console.log(this.loginService.getCurrentUser().roles[0])
+    if(this.loginService.getCurrentUser().roles[0]=='ROLE_MERCHANT')
+      this.shopList = await this.shopService.getShopListByUserId(this.loginService.getCurrentUser()._id);
+    else
+      this.shopList = await this.shopService.getAllShops();
+
+      console.log(this.shopList)
+
     for(var i=0; i<this.shopList.length; i++) {
-      if(this.shopList[i].verified == 'true') {
+      if(this.shopList[i].verified == true) {
         this.shops.push(this.shopList[i]);
       } else {
         this.requests.push(this.shopList[i]);

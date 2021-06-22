@@ -40,7 +40,7 @@ export class SignupComponent implements OnInit {
     else return false;
   }
 
-  onSubmit() {
+  async onSubmit() {
   
     if (this.signupForm.invalid || !this.checkPassword(this.f.password.value, this.f.checkPassword.value)) {
       //toaster
@@ -52,12 +52,12 @@ export class SignupComponent implements OnInit {
       lastname: this.f.name.value,
       mail: this.f.email.value,
       password: this.f.password.value,
-
-    })
+    });
     
-
-    if(user) {
-      this.loginService.setCurrentUser(this.userService.getUserByEmail(user.mail));
+    const results = await this.userService.createUser(user);
+    if(results) {
+      console.log('ici');
+      this.loginService.setCurrentUser(results);
       this.router.navigate(['/']);
     } else {
       //toaster

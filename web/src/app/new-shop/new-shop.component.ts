@@ -131,15 +131,12 @@ formatHours() {
     
     var number_address = this.f.address.value.split(' ')[0];
     var id_user = this.loginService.getCurrentUser()._id;
-    if(this.f.reward.value == '0') {
-      var reward = false;
-    } else {
-      reward = this.f.reward.value;
-    }
+  
     var shop = {
       // shopowner: this.f.shopowner.value,
-      // reward: reward,
-      // description:this.f.description.value,
+      reward: this.f.reward.value,
+      phone_number:this.f.phone.value,
+      description:this.f.description.value,
       hours: this.formatHours(),
       adress_name: this.f.address.value,
       city: this.f.city.value,

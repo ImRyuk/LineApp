@@ -54,10 +54,15 @@ export class UserService {
     }
 
     createUser(user) {
-      const headers = new HttpHeaders({})
+      const headers = new HttpHeaders({'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'})
       return new Promise((resolve) => {
         this.httpClient.post('http://localhost:3000/register',user,{headers} ).subscribe(results => {
-          resolve(true)
+          console.log(results);
+          resolve(results)
         }, error => {
           console.log(error);
           resolve(false)
@@ -67,7 +72,11 @@ export class UserService {
     }
 
     getAllUsers() {
-      const headers = new HttpHeaders({})
+      const headers = new HttpHeaders({'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'})
       return new Promise((resolve) => {
         this.httpClient.get('http://localhost:3000/users',{headers} ).subscribe(results => {
         this.userList = results;

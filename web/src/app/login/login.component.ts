@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     }
 
    //remplacer par this.loginService.loginUser(this.f.email.value,this.f.password.value);
-    if(await this.loginService.checkEmailAndPassword(this.f.email.value,this.f.password.value)) {
+    if(await this.loginService.loginUser(this.f.email.value,this.f.password.value)) {
       this.router.navigate(['/']);
     } else {
       //toaster ?
