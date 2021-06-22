@@ -48,36 +48,42 @@ const ShopSchema = new Schema({
         required: [true, `Please enter your zip code`]
 
     },
+    phone_number:{
+        type: "String",
+    },
+    description:{
+      type: "String"
+    },
     merchant:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     hours: {
-        lundi: {
+        monday: {
             type: Array,
             default: []
         },
-        mardi: {
+        tuesday: {
             type: Array,
             default: []
         },
-        mercredi: {
+        wednesday: {
             type: Array,
             default: []
         },
-        jeudi: {
+        thursday: {
             type: Array,
             default: []
         },
-        vendredi: {
+        friday: {
             type: Array,
             default: []
         },
-        samedi: {
+        saturday: {
             type: Array,
             default: []
         },
-        dimanche: {
+        sunday: {
             type: Array,
             default: []
         }
@@ -85,6 +91,10 @@ const ShopSchema = new Schema({
     type:{
       type: String
     },
+    reward:{
+        type: String,
+        default: ''
+    }
 },{
     timestamps: true
 });

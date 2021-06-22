@@ -30,7 +30,8 @@ exports.create_a_shop = async (req, res) => {
             type: req.body.type,
             verified: req.body.verified,
             city: req.body.city,
-            hours: req.body.hours
+            hours: req.body.hours,
+            reward: req.body.reward
         });
 
         // Save User in the database
@@ -112,6 +113,12 @@ exports.isOpen =  async function (req, res) {
     } else {
         return res.json("Magasin ouvert!") ;
     }
+}
+
+exports.hasReward = async function (req, res) {
+    let shop = await Shop.findOne({_id: req.params.shopId});
+
+    return res.json(shop.reward.length !== 0);
 }
 
 exports.waitTime = async function (req, res) {
