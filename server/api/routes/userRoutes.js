@@ -10,7 +10,7 @@ module.exports = function(app) {
         .post(users.create_a_user);
 
     app.route('/login')
-        .get(users.login_a_user);
+        .put(users.login_a_user);
 
     app.route('/users/:userId')
         .get(users.read_a_user)
