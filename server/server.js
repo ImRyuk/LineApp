@@ -8,7 +8,6 @@ const express = require('express'),
 require('dotenv').config();
 require('./api/models/userModel');
 require('./api/models/shopModel');
-require('./api/models/rewardModel');
 require('./api/models/visitModel');
 require('path');
 
@@ -32,7 +31,6 @@ app.use(cors());
 
 require("./api/routes/userRoutes")(app);
 require('./api/routes/shopRoutes')(app);
-require('./api/routes/rewardRoutes')(app);
 require('./api/routes/visitRoutes')(app);
 
 app.listen(process.env.PORT);

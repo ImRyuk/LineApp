@@ -1,3 +1,5 @@
+const moment = require('moment');
+const waitData = require('../../utils/waitData');
 const mongoose = require('mongoose'),
     Shop = mongoose.model('Shops');
 const User = mongoose.model('Users');
@@ -122,10 +124,40 @@ exports.hasReward = async function (req, res) {
 }
 
 exports.waitTime = async function (req, res) {
-   // let shop = await Shop.findOne({_id: req.params.shopId});
 
-    let visits = await Visit.find({shop: req.params.shopId});
+    function diffMinutes (endTime, startTime) {
+        const diffMs = (endTime - startTime); // milliseconds between the two dates
+        return Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    }
 
-    console.log(visits);
+    let now = new Date();
+    let lastWeek = new Date();
+    lastWeek.setDate( lastWeek.getDate() - 7 );
+    lastWeek.setHours(0,0,0,0);
+
+    Visit.find({$and:[
+            {start_visit:{$gte:moment(lastWeek),$lt:moment(now)}},
+            {shop: req.params.shopId}
+        ]}, function(err, task){
+        if (err)
+            res.send(err);
+        else{
+            let data = waitData();
+            task.map(obj => {
+                let day = moment(obj.start_visit).format('dddd');
+                let pastHour = new Date(obj.start_visit);
+                let hour = pastHour.getHours();
+                pastHour.setMinutes(0,0,0);
+                let minutes = Math.abs(diffMinutes(obj.start_visit, obj.end_visit));
+                let moyenne = (data[day].Time[hour].numberOfVisits * data[day].Time[hour].averageWait + minutes) / (data[day].Time[hour].numberOfVisits + 1);
+
+                data[day].Time[hour].averageWait = moyenne;
+                data[day].Time[hour].numberOfVisits ++;
+                data[day].TotalVisits ++;
+            });
+
+            res.json(data);
+        }
+    })
 
 }

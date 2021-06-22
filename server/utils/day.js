@@ -1,21 +1,21 @@
 const getDay = (dayNumber) => {
     switch (dayNumber) {
         case 0:
-            return 'lundi'
+            return 'monday'
         case 1:
-            return 'mardi'
+            return 'tuesday'
         case 2:
-            return 'mercredi'
+            return 'wednesday'
         case 3:
-            return 'jeudi'
+            return 'thursday'
         case 4:
-            return 'vendredi'
+            return 'friday'
         case 5:
-            return 'samedi'
+            return 'saturday'
         case 6:
-            return 'dimanche'
+            return 'sunday'
         default:
-            return 'lundi';
+            return 'monday';
     }
 }
 
