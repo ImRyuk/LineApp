@@ -51,12 +51,15 @@ class Shop extends Equatable {
         merchantId = json['merchant'],
         type = json['type'],
         hours = json['hours'];
+  
 
   Map<String, dynamic> toJson() => {
-        //TODO:pas fini
         'id': id,
         'verified': verified,
+        'siret_number': siretNumber,
         'name': name,
+        'location' : location,
+        'merchant' : merchantId,
         'type': type,
         'hours': hours
       };

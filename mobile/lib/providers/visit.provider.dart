@@ -8,7 +8,6 @@ class VisitProvider {
   const VisitProvider({required this.api});
 
   void saveVisit(Visit visit) async {
-    print(visit);
     final http.Response response = await api.post(path, body: visit.toJson());
     print(response.body);
   }

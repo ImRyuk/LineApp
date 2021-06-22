@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
 import 'package:line/style/colors.dart';
 import 'package:line/widgets/graph.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailCard extends StatefulWidget {
   final Shop shop;
@@ -25,8 +28,16 @@ class _DetailCardState extends State<DetailCard> {
     return "10 min";
   }
 
-  void saveToFavorite() {
-    //TODO: faire la fonction qui sauvegarde le shop dans le localstorage
+  void saveToFavorite() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if((prefs.getStringList("favorites") == null) || (prefs.getStringList("favorites")!.isEmpty)){
+      prefs.setStringList("favorites", [json.encode(widget.shop.toJson())]);
+    }
+    else {
+      List<String>? fav = prefs.getStringList("favorites");
+      fav!.add(json.encode(widget.shop.toJson()));
+      prefs.setStringList("favorites", fav);
+    }
   }
 
   void removeFromFavorite() {
@@ -180,7 +191,8 @@ class _DetailCardState extends State<DetailCard> {
       }
     }
     if (hours.length == 4) {
-      if ((now.hour >= hours[0] && now.hour < hours[1]) || (now.hour >= hours[2] && now.hour < hours[3])) {
+      if ((now.hour >= hours[0] && now.hour < hours[1]) ||
+          (now.hour >= hours[2] && now.hour < hours[3])) {
         return Text('Actuellement ouvert - ferme à ${hours[3]}h',
             style: TextStyle(
                 fontFamily: "Baloo", fontSize: 14, color: Colors.green));
@@ -189,8 +201,8 @@ class _DetailCardState extends State<DetailCard> {
             style: TextStyle(
                 fontFamily: "Baloo", fontSize: 14, color: Colors.red));
       }
-    }
-    else return Container();
+    } else
+      return Container();
   }
 
   Widget _getReward() {
