@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:line/models/reward.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
 import 'package:line/widgets/detail-card.dart';
 
 class RewardCard extends StatelessWidget {
-  final Reward reward;
   final Shop shop;
-  const RewardCard({required this.reward, required this.shop});
+  const RewardCard({required this.shop});
 
   @override
   Widget build(BuildContext context) {
@@ -40,33 +38,37 @@ class RewardCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                      width: SizeConfig.safeBlockHorizontal * 25,
+                      width: SizeConfig.safeBlockHorizontal * 20,
                       child: Image.asset('assets/images/carrefour.png')),
                   Text(
                     "A 5.2KM",
                     style: TextStyle(
                         fontFamily: "Baloo",
                         fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                        fontSize: SizeConfig.safeBlockVertical * 3),
                   )
                 ],
               ),
               Text(
                 shop.name!,
-                style: TextStyle(fontFamily: "Baloo", fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: "Baloo", fontSize: SizeConfig.safeBlockVertical * 3),
               ),
               Text(
                 shop.type!,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontFamily: "Baloo", color: Colors.black54, fontSize: 12),
+                    fontFamily: "Baloo", color: Colors.black54, fontSize: SizeConfig.safeBlockVertical * 2),
               ),
               Text(
                 shop.location!["city"],
-                style: TextStyle(fontFamily: "Baloo", fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: "Baloo", fontSize:  SizeConfig.safeBlockVertical * 2),
               ),
               Text(
                 shop.location!["streetNumber"] + " " + shop.location!["streetName"],
-                style: TextStyle(fontFamily: "Baloo", fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: "Baloo", fontSize:  SizeConfig.safeBlockVertical * 2),
               )
             ],
           ),

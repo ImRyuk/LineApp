@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:line/blocs/search/search_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
 import 'package:line/widgets/shop-card.dart';

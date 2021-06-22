@@ -30,10 +30,10 @@ class _DetailCardState extends State<DetailCard> {
 
   void saveToFavorite() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if((prefs.getStringList("favorites") == null) || (prefs.getStringList("favorites")!.isEmpty)){
+    if ((prefs.getStringList("favorites") == null) ||
+        (prefs.getStringList("favorites")!.isEmpty)) {
       prefs.setStringList("favorites", [json.encode(widget.shop.toJson())]);
-    }
-    else {
+    } else {
       List<String>? fav = prefs.getStringList("favorites");
       fav!.add(json.encode(widget.shop.toJson()));
       prefs.setStringList("favorites", fav);
@@ -151,25 +151,25 @@ class _DetailCardState extends State<DetailCard> {
     List<dynamic> hours;
     switch (now.weekday) {
       case 1:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['monday'];
         break;
       case 2:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['tuesday'];
         break;
       case 3:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['wednesday'];
         break;
       case 4:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['thursday'];
         break;
       case 5:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['friday'];
         break;
       case 6:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['saturday'];
         break;
       case 7:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['sunday'];
         break;
       default:
         hours = [];
@@ -206,7 +206,8 @@ class _DetailCardState extends State<DetailCard> {
   }
 
   Widget _getReward() {
-    //TODO: verifier qu'il y a des récompenses sinon return Container()
+    if ((widget.shop.reward == null) || (widget.shop.reward == ""))
+      return Container();
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: MyTheme.secondaryColor),

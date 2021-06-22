@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
       case 1:
         return FavoriteScreen(widget.prefs);
       case 2:
-        return RewardsScreen();
+        return RewardsScreen(widget.prefs);
       default:
         return SearchScreen();
     }
