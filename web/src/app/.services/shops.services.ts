@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {Shop} from '../.models/shop.model'
 import { UserService } from './user.services';
+import { Reward } from '../.models/reward.model';
+import { TypeOfShop } from '../.models/typeOfShop.model';
+
 @Injectable({
     providedIn: 'root'
   })
@@ -25,11 +28,13 @@ getAllShops() {
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
         })
+        var shopList: Array<Shop> = [];
     return new Promise((resolve) => {
         this.httpClient.get('http://localhost:3000/shops',{headers}).subscribe(results => {
-        this.shopList = results;
-        console.log(results)
-        resolve(true);
+        for(var i=0; i<Object.keys(results).length;i++) {
+            shopList.push(new Shop().deserialize(results[i]));
+        }
+        resolve(shopList);
     }, error => {
       console.log(error);
       resolve(false)
@@ -85,6 +90,20 @@ updateShop(updatedShop) {
 
 }
 
+validateShop(shopId) {
+    const headers = new HttpHeaders({})
+    return new Promise((resolve) => {
+        this.httpClient.post('http://localhost:3000/admin/shops/'+shopId+'/verify/',{headers}).subscribe(results => {
+            console.log(results) ;
+            resolve(true);
+        }, error => {
+            console.log(error);
+            resolve(false)
+        });
+    });
+  
+}
+
 createShop(newShop) {
 
     const headers = new HttpHeaders({})
@@ -101,14 +120,45 @@ createShop(newShop) {
 }
 
 
+getSecteurList() {
+    return new TypeOfShop().list;
+}
+
+getRewardList() {
+    return new Reward().rewardList;
+   
+}
+
+
 /////////
+
+getAllVisits() {
+    const headers = new HttpHeaders({})
+    return new Promise((resolve) => {
+        this.httpClient.get('http://localhost:3000/visits',{headers}).subscribe(results => {
+            console.log(results) ;
+            resolve(results);
+        }, error => {
+            console.log(error);
+            resolve(false)
+        });
+    });
+}
     getShopVisits() {
         //??
         return {
+            0:1,
+            1:1,
+            2:1,
+            3:1,
+            4:1,
+            5:1,
+            6:1,
+            7:1,
             8:1,
             9:1,
             10:2,
-            11:1,
+            11:5,
             12:1,
             13:4,
             14:1,
@@ -116,24 +166,15 @@ createShop(newShop) {
             16:1,
             17:1,
             18:1,
-            19:1
+            19:1,
+            20:1,
+            21:1,
+            22:1,
+            23:1,
+
         }
     }
 
-    getSecteurList() {
-       return ['boulangerie', 'supermarché'];
-    }
-
-    getRewardList() {
-        return ['-5% sur votre achat', '-10% sur votre achat', '1 produit offert'];
-       
-    }
-    getShopReward(shopId) {
-        return '-5% sur votre achat';
-    }
-
-    setShopReward(shopId) {
-        
-    }
+ 
 
 }

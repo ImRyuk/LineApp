@@ -2,13 +2,24 @@
 <section class='section-connected'>
     <app-side-menu></app-side-menu>
     <article id='dashboard-article'>
-        <div *ngIf="this.shop" id="shop-infos">
+        <!-- <div *ngIf="this.shop" id="shop-infos" > -->
+        <div *ngIf="this.shop" id="shop-infos" [ngStyle]="this.currentUserRole=='ROLE_ADMIN' || this.getScreenWidth()<1015 ? {'width': '90%'}:{'width': '60%'}">
+    
             <div id="shop-infos-header">
                 <img *ngIf="this.shop.hasOwnProperty('image')" id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/>
-                <h1 class="text-blue">{{this.shop.name}}</h1>
+                <div>
+                        <h1 class="text-blue">{{this.shop.name}}</h1>
                 <h2 class="text-pink">Catégorie : {{this.shop.type}}</h2>
+                </div>
+            
+                <div id="shop-infos-admin" *ngIf="this.currentUserRole=='ROLE_ADMIN'">
+                    <h1><span id='libelle-status'>Statut : </span>{{this.shop.verified ? 'vérifié' : 'non vérifié'}}</h1>
+                    <button *ngIf="this.currentUserRole=='ROLE_ADMIN' && this.shop.verified==false" class='button-simple'  (click)="validateShop(shop._id)">valider</button>
+       
+                </div>
             </div>
-            <div id='shop-infos-right'>
+            <div>
+                  <div id='shop-infos-right'>
                 <strong>Horaires</strong>
                 <table>
                     <tr>
@@ -117,19 +128,19 @@
                     <tr>
                         <th>Adresse</th>
                         <td>
-                            <span>{{this.shop.location.streetName}}</span><br>
+                            <span>{{this.shop.location.streetNumber}} {{this.shop.location.streetName}}</span><br>
                             <span>{{this.shop.location.zipcode}}</span><br>
                             <span>{{this.shop.location.city}}</span>
                         </td>
                     </tr>
-                    <tr *ngIf="this.shop.hasOwnProperty('phone')">
+                    <tr *ngIf="this.shop.hasOwnProperty('phone_number')&& this.shop.phone_number!=''">
                         <th>Téléphone</th>
-                        <td>{{this.shop.phone}}</td>
+                        <td>{{this.shop.phone_number}}</td>
                     </tr>
                
                 </table>
                 <table id="description">
-                    <tr *ngIf="this.shop.hasOwnProperty('description')">
+                    <tr *ngIf="this.shop.hasOwnProperty('description') && this.shop.description!=''">
                         <th>Description</th>
                         <td>{{this.shop.description}}</td>
                     </tr>
@@ -137,30 +148,38 @@
              
                 
             </div>
-         <button class='button-simple center'   routerLink="/modify/{{shop._id}}">modifier</button>
+            </div>
+          
+       
+                    <button class='button-simple center'   routerLink="/modify/{{shop._id}}">modifier</button>
+                   
+
         </div>
-        <aside>
+        <aside *ngIf="this.currentUserRole!='ROLE_ADMIN'">
             <div>
                 <h1 class="text-pink">Affluence</h1>
                 <div id="div-visits">
-                    <div *ngFor="let visit of visits  | keyvalue: originalOrder; let i = index" id="{{visit.key}}" (mouseenter)="showValue($event)" (mouseleave)="hideValue($event)" >
-                        <em id='value-{{visit.key}}' class='visit-value'>{{visit.value}}</em>
-                        <span id='graph-{{visit.key}}' [ngStyle]="{'height': visit.value*20+'px'}"></span>
-                        <strong  [ngStyle]="i%2==0 ? {'visibility': 'visible'}:{'visibility': 'hidden'}">{{visit.key}}</strong>
+                    <div *ngFor="let visit of visits  | keyvalue: originalOrder; let i = index" id="{{visit.key}}" [ngStyle]="graph(visit.key) ? {'display':'flex'} : {'display':'none'}" (mouseenter)="showValue($event)" (mouseleave)="hideValue($event)" >
+                        <em  *ngIf="graph(visit.key)"  id='value-{{visit.key}}' class='visit-value'>{{visit.value}}</em>
+                        <!-- <span id='graph-{{visit.key}}' [ngStyle]="{'height': visit.value*20+'px'}"></span> -->
+                        <span id='graph-{{visit.key}}' *ngIf="graph(visit.key)" [ngStyle]="{'height': (visit.value / maxValue) * 70+'%'}"></span>
+                        <strong *ngIf="graph(visit.key)" id='hour-{{visit.key}}' class='hour-{{i}}' [ngStyle]="i%2==0 ? {'visibility': 'visible'}:{'visibility': 'hidden'}">{{visit.key}}h</strong>
+                        <!-- <strong *ngIf="graph(visit.key)"  [ngStyle]="i%2==0 ? {'margin-top': '10px'}:{'margin-bottom': '10px'}">{{visit.key}}</strong> -->
                     </div>
                 </div>
 
             </div>
             <div>
                 <h1 class="text-blue">Récompenses</h1>
-                <div id="div-reward">
-                    <p>Voici les récompenses activées</p>
-                    <p id='show-reward'>{{this.reward}}</p>
-                    <select class='input' id="select-reward" name="reward-choice">
-                        <option value="1">-5% sur votre achat</option>
-                        <option value="2">-10% sur votre achat</option>
-                        <option value="3">1 produit offert</option>
-                    </select>
+                <div *ngIf="rewardForm" id="div-reward" [formGroup]="rewardForm">
+                    <p *ngIf="this.shop && this.shop.hasOwnProperty('reward') && this.shop.reward!=''">Voici les récompenses activées</p>
+                    <p *ngIf="this.shop && this.shop.hasOwnProperty('reward') && this.shop.reward!=''" id='show-reward'>{{this.shop.reward}}</p>
+                    <p *ngIf="this.shop && (!this.shop.hasOwnProperty('reward') || this.shop.reward=='')" id='show-reward'>Vous n'avez activé aucune récompense</p>
+                  
+                    <select class='input' id="select-reward" name="reward-choice" formControlName="reward">
+                        <option value="">Aucune</option>
+                        <option *ngFor="let reward of rewardList" value="{{reward}}" >{{reward}}</option>
+                     </select>
                 <input type='button' class='button-simple' id='button-reward' (click)='changeReward()' value='modifier' />
                 </div>
                 

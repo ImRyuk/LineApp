@@ -27,7 +27,7 @@ export class LoginService {
       var params = new HttpParams().append('mail', mail).append('password', password);
   
       console.log(params);
-      this.httpClient.get('http://localhost:3000/login',{headers, params} ).subscribe(results => {
+      this.httpClient.put('http://localhost:3000/login',{mail:mail, password:password},{headers} ).subscribe(results => {
           console.log(results);
           this.setCurrentUser(new User().deserialize(results))
           resolve(true);
@@ -56,6 +56,10 @@ export class LoginService {
 
   getCurrentUser() {
     return JSON.parse(sessionStorage.getItem('currentUser'));
+  }
+
+  getRole() {
+    return this.getCurrentUser().roles[0];
   }
 
   checkConnectedState() {
