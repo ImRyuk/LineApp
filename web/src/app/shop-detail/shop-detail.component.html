@@ -1,0 +1,175 @@
+<app-header></app-header>
+<section class='section-connected'>
+    <app-side-menu></app-side-menu>
+    <article id='dashboard-article'>
+        <div *ngIf="this.shop" id="shop-infos">
+            <div id="shop-infos-header">
+                <img *ngIf="this.shop.hasOwnProperty('image')" id="logo-shop" alt="logo du commerce" src="../../assets/images/logo.png"/>
+                <h1 class="text-blue">{{this.shop.name}}</h1>
+                <h2 class="text-pink">Catégorie : {{this.shop.type}}</h2>
+            </div>
+            <div id='shop-infos-right'>
+                <strong>Horaires</strong>
+                <table>
+                    <tr>
+                        <th>Lundi</th>
+                        <td *ngIf="!this.shop.hours.monday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.monday.length>0">
+                            <span>
+                                {{this.shop.hours.monday[0]}}h - {{this.shop.hours.monday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.monday[2]">
+                                / {{this.shop.hours.monday[2]}}h - {{this.shop.hours.monday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Mardi</th>
+                        <td *ngIf="!this.shop.hours.tuesday.length "><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.tuesday.length>0">
+                            <span>
+                                {{this.shop.hours.tuesday[0]}}h - {{this.shop.hours.tuesday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.tuesday[2]">
+                                / {{this.shop.hours.tuesday[2]}}h - {{this.shop.hours.tuesday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Mercredi</th>
+                        <td *ngIf="!this.shop.hours.wednesday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.wednesday.length>0">
+                            <span>
+                                {{this.shop.hours.wednesday[0]}}h - {{this.shop.hours.wednesday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.wednesday[2]">
+                                / {{this.shop.hours.wednesday[2]}}h - {{this.shop.hours.wednesday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Jeudi</th>
+                        <td *ngIf="!this.shop.hours.thursday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.thursday.length>0">
+                            <span>
+                                {{this.shop.hours.thursday[0]}}h - {{this.shop.hours.thursday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.thursday[2]">
+                                / {{this.shop.hours.thursday[2]}}h - {{this.shop.hours.thursday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Vendredi</th>
+                        <td *ngIf="!this.shop.hours.friday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.friday.length>0">
+                            <span>
+                                {{this.shop.hours.friday[0]}}h - {{this.shop.hours.friday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.friday[2]">
+                                / {{this.shop.hours.friday[2]}}h - {{this.shop.hours.friday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Samedi</th>
+                        <td *ngIf="!this.shop.hours.saturday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.saturday.length>0">
+                            <span>
+                                {{this.shop.hours.saturday[0]}}h - {{this.shop.hours.saturday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.saturday[2]">
+                                / {{this.shop.hours.saturday[2]}}h - {{this.shop.hours.saturday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <th>Dimanche</th>
+                        <td *ngIf="!this.shop.hours.sunday.length"><span>fermé</span></td>
+                        <td *ngIf="this.shop.hours.sunday.length>0">
+                            <span>
+                                {{this.shop.hours.sunday[0]}}h - {{this.shop.hours.sunday[1]}}h 
+                            </span>
+                            <span *ngIf="this.shop.hours.sunday[2]">
+                                / {{this.shop.hours.sunday[2]}}h - {{this.shop.hours.sunday[3]}}h 
+                            </span>
+                        </td>
+                    </tr>
+                
+                </table>
+            </div>
+            <div id='shop-infos-left'>
+                <table>
+                    <tr>
+                        <th>N° SIRET</th>
+                        <td>{{this.shop.siret_number}}</td>
+                    </tr>
+                    <tr>
+                        <th>Propriétaire</th>
+                        <td *ngIf="this.owner">{{this.owner.firstname}} {{this.owner.lastname}}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse</th>
+                        <td>
+                            <span>{{this.shop.location.streetName}}</span><br>
+                            <span>{{this.shop.location.zipcode}}</span><br>
+                            <span>{{this.shop.location.city}}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="this.shop.hasOwnProperty('phone')">
+                        <th>Téléphone</th>
+                        <td>{{this.shop.phone}}</td>
+                    </tr>
+               
+                </table>
+                <table id="description">
+                    <tr *ngIf="this.shop.hasOwnProperty('description')">
+                        <th>Description</th>
+                        <td>{{this.shop.description}}</td>
+                    </tr>
+                </table>
+             
+                
+            </div>
+         <button class='button-simple center'   routerLink="/modify/{{shop._id}}">modifier</button>
+        </div>
+        <aside>
+            <div>
+                <h1 class="text-pink">Affluence</h1>
+                <div id="div-visits">
+                    <div *ngFor="let visit of visits  | keyvalue: originalOrder; let i = index" id="{{visit.key}}" (mouseenter)="showValue($event)" (mouseleave)="hideValue($event)" >
+                        <em id='value-{{visit.key}}' class='visit-value'>{{visit.value}}</em>
+                        <span id='graph-{{visit.key}}' [ngStyle]="{'height': visit.value*20+'px'}"></span>
+                        <strong  [ngStyle]="i%2==0 ? {'visibility': 'visible'}:{'visibility': 'hidden'}">{{visit.key}}</strong>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <h1 class="text-blue">Récompenses</h1>
+                <div id="div-reward">
+                    <p>Voici les récompenses activées</p>
+                    <p id='show-reward'>{{this.reward}}</p>
+                    <select class='input' id="select-reward" name="reward-choice">
+                        <option value="1">-5% sur votre achat</option>
+                        <option value="2">-10% sur votre achat</option>
+                        <option value="3">1 produit offert</option>
+                    </select>
+                <input type='button' class='button-simple' id='button-reward' (click)='changeReward()' value='modifier' />
+                </div>
+                
+            </div>
+        </aside>
+    </article>
+
+</section>
+
+
+
+

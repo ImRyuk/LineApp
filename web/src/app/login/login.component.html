@@ -1,0 +1,14 @@
+<app-header [(menu_item)]="menu_item"></app-header>
+<section class="section-not-connected">
+    <article id='login-article'>
+        <h1>Se connecter</h1>
+        <form id='login-form' [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <input class='large-input' type="text" placeholder="Adresse mail" name='email' formControlName="email"/>
+        <input class='large-input' type="password" placeholder="Mot de passe" name='password' formControlName="password"/>
+        <button type='submit' class='button-simple' >valider</button>
+    </form>
+    </article>
+   
+
+</section>

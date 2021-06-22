@@ -1,0 +1,20 @@
+<app-header [(menu_item)]="menu_item"></app-header>
+<section class="section-not-connected">
+
+    <article id='signup-article'>    
+        <h1>S'inscrire</h1>
+        <form id='signup-form' [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+        <input class='large-input' type="text" placeholder="Adresse mail" name='email' formControlName="email"/>
+        <div>
+            <input class='large-input small-input' type="text" placeholder="Nom" name='name' formControlName="name"/>
+            <input class='large- small-input' type="text" placeholder="Prénom" name='firstname' formControlName="firstname"/>
+        </div>
+        <input class='large-input' type="password" placeholder="Mot de passe" name='password' formControlName="password"/>
+        <input class='large-input' type="password" placeholder="Confirmer le mot de passe" name='checkPassword' formControlName="checkPassword"/>
+        <button type='submit' class='button-simple'>valider</button>
+    </form>
+    </article>
+
+
+</section>

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line/blocs/visit/visit_bloc.dart';
+import 'package:line/providers/visit.provider.dart';
 
 import 'blocs/search/search_bloc.dart';
 import 'env/env.dart';
@@ -21,7 +23,6 @@ class SimpleBlocDelegate extends BlocObserver {
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -37,6 +38,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ShopProvider>(
           create: (context) =>
               ShopProvider(api: RepositoryProvider.of<Api>(context)),
+        ),
+        RepositoryProvider<VisitProvider>(
+          create: (context) =>
+              VisitProvider(api: RepositoryProvider.of<Api>(context)),
         )
       ],
       child: MultiBlocProvider(
@@ -45,6 +50,11 @@ class MyApp extends StatelessWidget {
             create: (context) => SearchBloc(
                 api: RepositoryProvider.of<Api>(context),
                 shopProvider: RepositoryProvider.of<ShopProvider>(context)),
+          ),
+          BlocProvider<VisitBloc>(
+            create: (context) => VisitBloc(
+                api: RepositoryProvider.of<Api>(context),
+                visitProvider: RepositoryProvider.of<VisitProvider>(context)),
           )
         ],
         child: Home(),

@@ -10,3 +10,9 @@ class VisitStart extends VisitEvent {
 
   VisitStart(this.shop);
 }
+
+class VisitFinish extends VisitEvent {
+  final Visit visit;
+
+  VisitFinish({required this.visit});
+}

@@ -1,0 +1,28 @@
+header {
+    width : calc(100vw - 20px);
+    height: 30px;
+    background-color: var(--purple);
+    border-bottom: 5px solid var(--pink);
+    color:white;
+    display: flex;
+    align-items: center;
+    padding : 5px 10px;
+    font-size: 1.1em;
+    justify-content: space-between;
+}
+
+a {
+    color:white;
+    text-decoration: none;
+}
+
+header>div {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+img {
+    height:100%;
+    cursor: pointer;
+}

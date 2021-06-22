@@ -1,0 +1,16 @@
+<nav>
+   <ul>
+       <h1>Mes commerces</h1>
+       <li *ngFor="let shop of shops">
+          <span  routerLink="/detail/{{shop._id}}">{{shop.name}}</span>
+       </li>
+   </ul> 
+
+   <ul>
+    <h1>Mes demandes en cours</h1>
+    <li *ngFor="let shop of requests">
+         <span routerLink="/detail/{{shop._id}}">{{shop.name}}</span>
+    </li>
+    <input type='button' class='button-large center' routerLink="/newshop" value='ajouter un commerce' />
+</ul> 
+</nav>

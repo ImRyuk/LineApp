@@ -1,0 +1,154 @@
+section {
+    width: 100vw;
+}
+@media (min-width: 1015px) { 
+    .right {
+        justify-content: flex-end;
+    }
+    .width-100>div {
+        width: calc(100% - 100px - 4vw);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+    #new-shop-article {
+        justify-content: space-between;
+    }
+}
+    
+@media (max-width: 1014px) {
+
+    .width-100>div .large-input {
+        width: 96%;
+    }
+
+    .width-100>div {
+        /* width: calc(100% - 100px - 4vw); */
+        display: flex;
+        flex-direction: column;
+        width: 67%;
+        /* justify-content: space-between; */
+        /* flex-wrap: wrap; */
+    }
+
+    #new-shop-article {
+        justify-content: center;
+    }
+    #new-shop-article>div {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #time-choice, #right-column {
+        width:88% !important;
+    /* margin: 0 6vw; */
+    }
+}
+    
+
+#new-shop-article {
+    width: 75%;
+    display: flex;
+    gap:2vh;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    padding: 2%;
+}
+
+#new-shop-article h1 {
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--purple);
+}
+
+.container-input {
+    display: flex;
+    /* height: 40px; */
+}
+
+.right-label {
+    text-align: right;
+    width: 100px;
+    margin-right: 4vw;
+    margin-top: 4px;
+    /* transform: translateY(-50%); */
+}
+
+.width-50 {
+    min-width: 350px;
+    width:48%;
+}
+
+.width-50 .form-input {
+    min-width : 200px;
+    width : 65%;
+}
+
+.width-100 {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.width-100 .large-input {
+    min-width: 200px;
+    width : 50%;
+}
+
+.width-100 .small-input {
+    min-width: 75px;
+    width : 120px;
+}
+
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#select-reward {
+    width : 80%;
+}
+
+
+
+#time-choice  {
+    text-align: center;
+    /* width: 100%; */
+}
+
+
+
+#right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+#right-column>textarea, #right-column>select, #right-column>div {
+    margin-bottom: 5px;
+}
+
+#logo-button {
+    background-color: var(--blue);
+    border: 1px solid white;
+    padding : 0 15px;
+    height: 30px;
+    color: white;
+    font-weight: bold;
+    margin-top: 2.5px;
+}
+
+.container-input p {
+    margin-top: 15px;
+    margin-left: 1vw;
+    transform: translateY(-50%);
+}
+
+#container-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* margin-top : 1vh; */
+}

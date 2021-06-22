@@ -1,0 +1,64 @@
+<app-header></app-header>
+<section class='section-connected'>
+    <app-side-menu></app-side-menu>
+    <form *ngIf="newShopForm" id='new-shop-article' [formGroup]="newShopForm" (ngSubmit)="onSubmit()">
+        <h1>Ajouter un commerce</h1>
+        <div class="container-input width-50 left">
+            <label for="shopname" class='right-label'>Nom</label>
+            <input class='input form-input' type="text"  name="shopname" formControlName="name"/>
+        </div>
+        <div class="container-input width-50 right">
+            <label for="siret" class='right-label'>N° SIRET</label>
+            <input class='input form-input' type="number" placeholder="XXXXXXXXXXXXXX" name="siret" formControlName="siret_number"/>
+        </div>
+        <div class="container-input width-50 left">
+            <label for="shopowner" class='right-label'>Propriétaire</label>
+            <input class='input form-input' type="text" placeholder="Nom et prénom du propriétaire du commerce" name="shopowner" formControlName="shopowner"/>
+        </div>
+        <div class="container-input width-50 right">
+            <label for="phone" class='right-label'>Téléphone</label>
+            <input class='input form-input' type="text" placeholder="XXXXXXXXXX" name="phone" formControlName="phone"/>
+    
+        </div>
+        <div class="container-input width-100">
+            <label for="address" class='right-label'>Adresse</label>
+            <div>
+            <input class='input large-input' type="text" placeholder="N°, nom de voie" name="address" formControlName="address"/>
+            <input class='input small-input' type="text" placeholder="Ville" name="city" formControlName="city"/>
+            <input class='input small-input' type="number" placeholder="Code postal" name="zipcode" formControlName="zip_code"/>
+            </div>
+        </div>
+        <div class='width-50' id="time-choice">
+            <label>Horaires</label> 
+            <app-hours *ngFor="let d of days; let i = index" [(day)]="days[i]" [(hours)]="hoursList" [(form)]="newShopForm.controls.hours"></app-hours>
+                
+       
+
+        </div>
+        <div class='width-50' id="right-column">
+            <label for='description'>Description</label>
+            <textarea type="textarea" class='input' rows="4" placeholder="Saisissez une description de votre commerce" name='description' formControlName="description"></textarea>
+            <label for='activity'>Secteur d'activité</label>
+            <select class='input'  name="secteur-choice" formControlName="secteur">
+                <option *ngFor="let secteur of secteurList" value="{{secteur}}">{{secteur}}</option>
+            </select>
+            <label for='reward'>Récompenses</label>
+            <select class='input'  name="reward-choice" formControlName="reward">
+                <option value="0">Aucune</option>
+                <option *ngFor="let reward of rewardList" value="{{reward}}" >{{reward}}</option>
+               
+            </select>
+            <label for='logo'>Ajouter un logo</label>
+            <div class='container-input'>
+                <input type='button' id='logo-button' value='Rechercher' />
+                <p>Aucun fichier sélectionné</p>
+            </div>
+            
+        </div>
+        <div id='container-button'>
+            <button type="submit" class='button-simple' >valider</button>
+        </div>
+        
+    
+    </form>
+</section>

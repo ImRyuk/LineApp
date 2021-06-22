@@ -1,0 +1,40 @@
+#signup-article {
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 20px;
+    height : 80%;
+    min-width: 300px;
+    width: 35%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#signup-form {
+    width: 100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#signup-article h1 {
+    text-transform: uppercase;
+    margin : 10% 0 5% 0; 
+}
+
+#signup-form>.input {
+    width:80%;
+}
+#signup-form>div {
+    display: flex;
+    justify-content: space-between;
+    width: calc(80% + 10px);
+    
+}
+
+.small-input {
+    width : 45%;
+}
