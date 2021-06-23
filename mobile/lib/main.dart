@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line/blocs/affluence/affluence_bloc.dart';
 import 'package:line/blocs/geolocate/geolocate_bloc.dart';
+import 'package:line/blocs/notification/notification_bloc.dart';
 import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/providers/visit.provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,42 +36,51 @@ class MyApp extends StatelessWidget {
   const MyApp({required this.prefs});
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<Api>(
-          create: (context) => Api(
-            authority: env['api_authority'] as String,
-            endpoint: env['api_endpoint'] as String,
-            endpointPath: env['api_path'] as String,
-            port: env['api_port'] as int,
-          ),
-        ),
-        RepositoryProvider<ShopProvider>(
-          create: (context) =>
-              ShopProvider(api: RepositoryProvider.of<Api>(context)),
-        ),
-        RepositoryProvider<VisitProvider>(
-          create: (context) =>
-              VisitProvider(api: RepositoryProvider.of<Api>(context)),
-        )
-      ],
-      child: MultiBlocProvider(
+    return BlocProvider<NotificationBloc>(
+      create: (context) => NotificationBloc(),
+      child: MultiRepositoryProvider(
         providers: [
-          BlocProvider<SearchBloc>(
-            create: (context) => SearchBloc(
-                api: RepositoryProvider.of<Api>(context),
-                shopProvider: RepositoryProvider.of<ShopProvider>(context)),
+          RepositoryProvider<Api>(
+            create: (context) => Api(
+              authority: env['api_authority'] as String,
+              endpoint: env['api_endpoint'] as String,
+              endpointPath: env['api_path'] as String,
+              port: env['api_port'] as int,
+            ),
           ),
-          BlocProvider<VisitBloc>(
-            create: (context) => VisitBloc(
-                api: RepositoryProvider.of<Api>(context),
-                visitProvider: RepositoryProvider.of<VisitProvider>(context)),
+          RepositoryProvider<ShopProvider>(
+            create: (context) =>
+                ShopProvider(api: RepositoryProvider.of<Api>(context)),
           ),
-          BlocProvider<GeolocateBloc>(
-            create: (context) => GeolocateBloc(),
+          RepositoryProvider<VisitProvider>(
+            create: (context) =>
+                VisitProvider(api: RepositoryProvider.of<Api>(context)),
           )
         ],
-        child: Home(prefs: prefs),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<SearchBloc>(
+              create: (context) => SearchBloc(
+                  api: RepositoryProvider.of<Api>(context),
+                  shopProvider: RepositoryProvider.of<ShopProvider>(context)),
+            ),
+            BlocProvider<AffluenceBloc>(
+              create: (context) => AffluenceBloc(
+                  api: RepositoryProvider.of<Api>(context),
+                  shopProvider: RepositoryProvider.of<ShopProvider>(context)),
+            ),
+            BlocProvider<VisitBloc>(
+              create: (context) => VisitBloc(
+                  api: RepositoryProvider.of<Api>(context),
+                  visitProvider: RepositoryProvider.of<VisitProvider>(context),
+                  notificationBloc: BlocProvider.of<NotificationBloc>(context)),
+            ),
+            BlocProvider<GeolocateBloc>(
+              create: (context) => GeolocateBloc(),
+            )
+          ],
+          child: Home(prefs: prefs),
+        ),
       ),
     );
   }

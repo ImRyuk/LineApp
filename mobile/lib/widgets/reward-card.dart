@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:line/blocs/affluence/affluence_bloc.dart';
 import 'package:line/blocs/geolocate/geolocate_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
@@ -35,6 +36,9 @@ class RewardCard extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: GestureDetector(
         onTap: () {
+          String shopId = shop.id ?? "";
+          BlocProvider.of<AffluenceBloc>(context)
+              .add(AffluenceStart(shopId: shopId));
           showModalBottomSheet(
               isScrollControlled: true,
               context: context,
@@ -63,7 +67,7 @@ class RewardCard extends StatelessWidget {
                 children: [
                   Container(
                       width: SizeConfig.safeBlockHorizontal * 20,
-                      child: Image.asset('assets/images/carrefour.png')),
+                      child: Image.asset('assets/images/logo.png')),
                   if (geoState is GeolocateLoading) CircularProgressIndicator(),
                   if (geoState is GeolocateLoaded)
                     Center(
@@ -111,15 +115,17 @@ class RewardCard extends StatelessWidget {
               Expanded(
                   child: Center(
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
                 width: SizeConfig.safeBlockHorizontal * 60,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: MyTheme.altColor),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: MyTheme.altColor),
                 child: Text(
                   shop.reward!,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.white,
+                      color: Colors.white,
                       fontFamily: "Baloo",
                       fontSize: SizeConfig.safeBlockVertical * 3),
                 ),

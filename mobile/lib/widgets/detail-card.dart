@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:line/blocs/affluence/affluence_bloc.dart';
 import 'package:line/blocs/geolocate/geolocate_bloc.dart';
 import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/models/shop.dart';
@@ -28,7 +29,9 @@ class _DetailCardState extends State<DetailCard> {
     setState(() {
       shopIsFavorite = false;
     });
-
+    if ((widget.prefs.getStringList("favorites") == null)) {
+      return;
+    }
     if (widget.prefs
         .getStringList("favorites")!
         .contains(json.encode(widget.shop.toJson())))
@@ -69,24 +72,26 @@ class _DetailCardState extends State<DetailCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.safeBlockHorizontal * 100,
-      height: SizeConfig.blockSizeVertical * 80,
-      padding: EdgeInsets.all(10),
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 2,
-                    spreadRadius: 0,
-                    offset: Offset(0, 2))
-              ]),
-          child: ListView(
-            children: [_getDesc(context), _getBody()],
-          )),
+    return Scaffold(
+      body: Container(
+        width: SizeConfig.safeBlockHorizontal * 100,
+        height: SizeConfig.blockSizeVertical * 100,
+        padding: EdgeInsets.all(10),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 2,
+                      spreadRadius: 0,
+                      offset: Offset(0, 2))
+                ]),
+            child: Column(
+              children: [_getDesc(context), _getBody()],
+            )),
+      ),
     );
   }
 
@@ -110,7 +115,7 @@ class _DetailCardState extends State<DetailCard> {
       children: [
         Container(
             width: SizeConfig.safeBlockHorizontal * 30,
-            child: Image.asset('assets/images/carrefour.png')),
+            child: Image.asset('assets/images/logo.png')),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -275,17 +280,30 @@ class _DetailCardState extends State<DetailCard> {
 
   Widget _getBody() {
     VisitState visitState = context.watch<VisitBloc>().state;
+    AffluenceState affState = context.watch<AffluenceBloc>().state;
+    if (affState is AffluenceUninitialized) {
+      String shopId = widget.shop.id ?? "";
+      BlocProvider.of<AffluenceBloc>(context)
+          .add(AffluenceStart(shopId: shopId));
+    }
     return Column(
       children: [
         Text(
           "Affluence:",
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
-        Graph(
-          shop: widget.shop,
-        ),
+        if (affState is AffluenceLoading) CircularProgressIndicator(),
+        if (affState is AffluenceLoaded)
+          Container(
+            padding: EdgeInsets.only(top: 40),
+            height: SizeConfig.blockSizeVertical*30,
+            child: Graph(
+              shop: widget.shop,
+            ),
+          ),
+        if (affState is AffluenceLoaded)
         Text(
-          "Temps d'attente estimé : " + getWaitingTime(),
+          "Temps d'attente estimé : " + affState.waitTime,
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
         TextButton(

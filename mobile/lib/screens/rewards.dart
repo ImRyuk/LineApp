@@ -18,11 +18,13 @@ class _RewardsScreenState extends State<RewardsScreen> {
   final searchController = TextEditingController();
 
   List<Shop> getRewards() {
+        List<Shop> shops = [];
+    if (widget.prefs.getStringList("rewards") != null) {
     List<String>? rewards = widget.prefs.getStringList("rewards");
-    List<Shop> shops = [];
     rewards!.forEach((rew) {
       shops.add(Shop.fromJson(json.decode(rew)));
     });
+    }
     return shops;
   }
 

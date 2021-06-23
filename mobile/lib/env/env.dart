@@ -7,11 +7,11 @@ const dev = {
   'api_path': '',
 };
 
-const prod = {
+const devweb = {
   'api_authority': 'http',
   'api_endpoint': '127.0.0.1',
   'api_port': 3000,
   'api_path': '',
 };
 
-const env = (stage == 'prod' ? prod : dev);
+const env = (stage == 'devweb' ? devweb : dev);

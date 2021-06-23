@@ -18,11 +18,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   final searchController = TextEditingController();
 
   List<Shop> getFavorites() {
-    List<String>? favs = widget.prefs.getStringList("favorites");
     List<Shop> shops = [];
-    favs!.forEach((fav) {
-      shops.add(Shop.fromJson(json.decode(fav)));
-    });
+    if (widget.prefs.getStringList("favorites") != null) {
+      List<String>? favs = widget.prefs.getStringList("favorites");
+      favs!.forEach((fav) {
+        shops.add(Shop.fromJson(json.decode(fav)));
+      });
+    }
     return shops;
   }
 
@@ -31,7 +33,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     SizeConfig().init(context);
 
     return Container(
-
       child: Column(
         children: [
           Expanded(

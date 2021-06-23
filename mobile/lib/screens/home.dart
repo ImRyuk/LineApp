@@ -3,6 +3,7 @@ import 'package:line/screens/favorites.dart';
 import 'package:line/screens/rewards.dart';
 import 'package:line/screens/search.dart';
 import 'package:line/style/colors.dart';
+import 'package:line/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -61,7 +62,7 @@ class _HomeState extends State<Home> {
         backgroundColor: MyTheme.primaryColor,
       ),
       backgroundColor: Color(0xFFE5E5E5),
-      body: _getChildren(_currentIndex),
+      body: Notif(child: _getChildren(_currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: _currentIndex,

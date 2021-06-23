@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:line/blocs/notification/notification_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/models/visit.dart';
 import 'package:line/providers/visit.provider.dart';
@@ -19,7 +20,8 @@ part 'visit_state.dart';
 class VisitBloc extends Bloc<VisitEvent, VisitState> {
   final Api api;
   final VisitProvider visitProvider;
-  VisitBloc({required this.api, required this.visitProvider})
+  final NotificationBloc notificationBloc;
+  VisitBloc({required this.api, required this.visitProvider, required this.notificationBloc})
       : super(VisitUninitialized());
 
   @override
@@ -41,7 +43,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
 
     if (Geolocator.distanceBetween(
             shopLat, shopLong, pos.latitude, pos.longitude) <=
-        50000) {
+        500) {
       if (event.shop.reward != null && event.shop.reward != "") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         if (!prefs
@@ -60,8 +62,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       Visit visit = Visit(shopId: event.shop.id, startDate: pos.timestamp);
       yield VisitStarted(visit: visit);
     } else {
+      notificationBloc.add(NotificationError("Vous êtes trop loin du magasin"));
       yield VisitUninitialized();
-      throw Exception("Distance trop elevée");
     }
   }
 

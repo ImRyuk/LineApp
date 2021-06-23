@@ -13,8 +13,18 @@ class ShopProvider {
 
   Future<List<Shop>> getManyFromKeyword(String search) async {
     try {
-      Response response = await this.api.get(path);
+      Response response = await this.api.get(path + "/search/$search");
       return _convertRawListToObject(response);
+    } catch (e) {
+      print(e);
+      throw Exception("Erreur de chargement des shop");
+    }
+  }
+
+  Future<dynamic> getAffluence(String shopId) async {
+    try {
+      Response response = await this.api.get(path + "/waitTime/$shopId");
+      return json.decode(response.body);
     } catch (e) {
       print(e);
       throw Exception("Erreur de chargement des shop");
