@@ -9,6 +9,7 @@ class Shop extends Equatable {
   final String? merchantId;
   final String? type;
   final Map<String, dynamic>? hours;
+  final String? reward;
 
   const Shop({
     this.id,
@@ -19,6 +20,7 @@ class Shop extends Equatable {
     this.name,
     this.type,
     this.hours,
+    this.reward,
   });
 
   Shop copyWith(
@@ -29,7 +31,8 @@ class Shop extends Equatable {
       Map<String, dynamic>? location,
       String? merchantId,
       String? type,
-      Map<String, dynamic>? hours}) {
+      Map<String, dynamic>? hours,
+      String? reward}) {
     return Shop(
       id: id ?? this.id,
       verified: verified ?? this.verified,
@@ -39,6 +42,7 @@ class Shop extends Equatable {
       merchantId: merchantId ?? this.merchantId,
       type: type ?? this.type,
       hours: hours ?? this.hours,
+      reward: reward ?? this.reward,
     );
   }
 
@@ -50,15 +54,20 @@ class Shop extends Equatable {
         location = json['location'],
         merchantId = json['merchant'],
         type = json['type'],
-        hours = json['hours'];
+        hours = json['hours'],
+        reward = json['reward'];
+  
 
   Map<String, dynamic> toJson() => {
-        //TODO:pas fini
         'id': id,
         'verified': verified,
+        'siret_number': siretNumber,
         'name': name,
+        'location' : location,
+        'merchant' : merchantId,
         'type': type,
-        'hours': hours
+        'hours': hours,
+        'reward': reward
       };
 
   @override
@@ -66,8 +75,7 @@ class Shop extends Equatable {
     return 'Shop { id: $id,' +
         ' | name: $name' +
         ' | location: $location ' +
-        ' | merchantId: $merchantId ' +
-        ' | type: $type ' +
+        ' | reward: $reward ' +
         ' | type: $hours }';
   }
 

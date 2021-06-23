@@ -1,67 +1,121 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:line/blocs/affluence/affluence_bloc.dart';
+import 'package:line/blocs/geolocate/geolocate_bloc.dart';
 import 'package:line/blocs/visit/visit_bloc.dart';
 import 'package:line/models/shop.dart';
 import 'package:line/services/size_config.dart';
 import 'package:line/style/colors.dart';
 import 'package:line/widgets/graph.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailCard extends StatefulWidget {
   final Shop shop;
-  const DetailCard({required this.shop});
+  final SharedPreferences prefs;
+  const DetailCard({required this.shop, required this.prefs});
 
   @override
   _DetailCardState createState() => _DetailCardState();
 }
 
 class _DetailCardState extends State<DetailCard> {
-  bool isFavorite() {
-//TODO: faire la fonction qui vérifie dans le local storage si le shop est dans le local storage
-    return false;
+  late bool shopIsFavorite;
+
+  void isFavorite() {
+    setState(() {
+      shopIsFavorite = false;
+    });
+    if ((widget.prefs.getStringList("favorites") == null)) {
+      return;
+    }
+    if (widget.prefs
+        .getStringList("favorites")!
+        .contains(json.encode(widget.shop.toJson())))
+      setState(() {
+        shopIsFavorite = true;
+      });
   }
 
   String getWaitingTime() {
     return "10 min";
   }
 
-  void saveToFavorite() {
-    //TODO: faire la fonction qui sauvegarde le shop dans le localstorage
+  void saveToFavorite() async {
+    if ((widget.prefs.getStringList("favorites") == null) ||
+        (widget.prefs.getStringList("favorites")!.isEmpty)) {
+      widget.prefs
+          .setStringList("favorites", [json.encode(widget.shop.toJson())]);
+    } else {
+      List<String>? fav = widget.prefs.getStringList("favorites");
+      fav!.add(json.encode(widget.shop.toJson()));
+      widget.prefs.setStringList("favorites", fav);
+    }
+    isFavorite();
   }
 
   void removeFromFavorite() {
-    //TODO: faire la fonction qui retire le shop dans le localstorage
+    List<String> strings = widget.prefs.getStringList("favorites")!;
+    strings.remove(json.encode(widget.shop.toJson()));
+    widget.prefs.setStringList("favorites", strings);
+    isFavorite();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.safeBlockHorizontal * 100,
-      height: SizeConfig.blockSizeVertical * 80,
-      padding: EdgeInsets.all(10),
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 2,
-                    spreadRadius: 0,
-                    offset: Offset(0, 2))
-              ]),
-          child: ListView(
-            children: [_getDesc(), _getBody()],
-          )),
+    return Scaffold(
+      body: Container(
+        width: SizeConfig.safeBlockHorizontal * 100,
+        height: SizeConfig.blockSizeVertical * 100,
+        padding: EdgeInsets.all(10),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 2,
+                      spreadRadius: 0,
+                      offset: Offset(0, 2))
+                ]),
+            child: Column(
+              children: [_getDesc(context), _getBody()],
+            )),
+      ),
     );
   }
 
-  Widget _getDesc() {
+  String getDistance(Position position) {
+    double distance = Geolocator.distanceBetween(
+            widget.shop.location!["coordinates"][0],
+            widget.shop.location!["coordinates"][1],
+            position.latitude,
+            position.longitude) /
+        1000;
+
+    return "A ${distance.toStringAsFixed(1)}KM";
+  }
+
+  Widget _getDesc(BuildContext context) {
+    GeolocateState geoState = context.watch<GeolocateBloc>().state;
+    if (geoState is GeolocateUninitialized) {
+      BlocProvider.of<GeolocateBloc>(context).add(GeolocateStart());
+    }
     return Row(
       children: [
         Container(
             width: SizeConfig.safeBlockHorizontal * 30,
-            child: Image.asset('assets/images/carrefour.png')),
+            child: Image.asset('assets/images/logo.png')),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -105,22 +159,29 @@ class _DetailCardState extends State<DetailCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          "A 5.2KM",
-                          style: TextStyle(
-                              fontFamily: "Baloo",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                      if (geoState is GeolocateLoading)
+                        CircularProgressIndicator(),
+                      if (geoState is GeolocateLoaded)
+                        Center(
+                          child: Text(
+                            getDistance(geoState.position),
+                            style: TextStyle(
+                                fontFamily: "Baloo",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          ),
                         ),
-                      ),
                       IconButton(
                         icon: Icon(
-                          isFavorite() ? Icons.favorite : Icons.favorite_border,
+                          shopIsFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: MyTheme.secondaryColor,
                           size: SizeConfig.safeBlockHorizontal * 10,
                         ),
-                        onPressed: saveToFavorite,
+                        onPressed: shopIsFavorite
+                            ? removeFromFavorite
+                            : saveToFavorite,
                       )
                     ],
                   ),
@@ -140,25 +201,25 @@ class _DetailCardState extends State<DetailCard> {
     List<dynamic> hours;
     switch (now.weekday) {
       case 1:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['monday'] ?? [];
         break;
       case 2:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['tuesday'] ?? [];
         break;
       case 3:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['wednesday'] ?? [];
         break;
       case 4:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['thursday'] ?? [];
         break;
       case 5:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['friday'] ?? [];
         break;
       case 6:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['saturday'] ?? [];
         break;
       case 7:
-        hours = widget.shop.hours!['lundi'];
+        hours = widget.shop.hours!['sunday'] ?? [];
         break;
       default:
         hours = [];
@@ -180,7 +241,8 @@ class _DetailCardState extends State<DetailCard> {
       }
     }
     if (hours.length == 4) {
-      if ((now.hour >= hours[0] && now.hour < hours[1]) || (now.hour >= hours[2] && now.hour < hours[3])) {
+      if ((now.hour >= hours[0] && now.hour < hours[1]) ||
+          (now.hour >= hours[2] && now.hour < hours[3])) {
         return Text('Actuellement ouvert - ferme à ${hours[3]}h',
             style: TextStyle(
                 fontFamily: "Baloo", fontSize: 14, color: Colors.green));
@@ -189,12 +251,13 @@ class _DetailCardState extends State<DetailCard> {
             style: TextStyle(
                 fontFamily: "Baloo", fontSize: 14, color: Colors.red));
       }
-    }
-    else return Container();
+    } else
+      return Container();
   }
 
   Widget _getReward() {
-    //TODO: verifier qu'il y a des récompenses sinon return Container()
+    if ((widget.shop.reward == null) || (widget.shop.reward == ""))
+      return Container();
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: MyTheme.secondaryColor),
@@ -217,17 +280,30 @@ class _DetailCardState extends State<DetailCard> {
 
   Widget _getBody() {
     VisitState visitState = context.watch<VisitBloc>().state;
+    AffluenceState affState = context.watch<AffluenceBloc>().state;
+    if (affState is AffluenceUninitialized) {
+      String shopId = widget.shop.id ?? "";
+      BlocProvider.of<AffluenceBloc>(context)
+          .add(AffluenceStart(shopId: shopId));
+    }
     return Column(
       children: [
         Text(
           "Affluence:",
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
-        Graph(
-          shop: widget.shop,
-        ),
+        if (affState is AffluenceLoading) CircularProgressIndicator(),
+        if (affState is AffluenceLoaded)
+          Container(
+            padding: EdgeInsets.only(top: 40),
+            height: SizeConfig.blockSizeVertical*30,
+            child: Graph(
+              shop: widget.shop,
+            ),
+          ),
+        if (affState is AffluenceLoaded)
         Text(
-          "Temps d'attente estimé : " + getWaitingTime(),
+          "Temps d'attente estimé : " + affState.waitTime,
           style: TextStyle(fontFamily: "Baloo", fontSize: 18),
         ),
         TextButton(

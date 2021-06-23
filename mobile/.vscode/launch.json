@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "line",
+            "name": "line android",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "line (profile mode)",
+            "name": "line web",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "args": ["--dart-define=APP_ENV=devweb"]
         }
     ]
 }
