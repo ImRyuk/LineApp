@@ -154,6 +154,8 @@ exports.waitTime = async function (req, res) {
                 data[day].Time[hour].averageWait = moyenne;
                 data[day].Time[hour].numberOfVisits ++;
                 data[day].TotalVisits ++;
+            });
+
             res.json(data);
         }
     })
