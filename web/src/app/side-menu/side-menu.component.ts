@@ -28,9 +28,12 @@ export class SideMenuComponent implements OnInit {
   }
 
   async getShops(){
-    this.shopList = await this.shopService.getShopListByUserId(this.loginService.getCurrentUser()._id);
+    if(this.loginService.getCurrentUser().roles[0]=='ROLE_MERCHANT')
+      this.shopList = await this.shopService.getShopListByUserId(this.loginService.getCurrentUser()._id);
+    else
+      this.shopList = await this.shopService.getAllShops();
     for(var i=0; i<this.shopList.length; i++) {
-      if(this.shopList[i].verified == 'true') {
+      if(this.shopList[i].verified == true) {
         this.shops.push(this.shopList[i]);
       } else {
         this.requests.push(this.shopList[i]);

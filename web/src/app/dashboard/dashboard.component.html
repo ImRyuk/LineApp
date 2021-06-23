@@ -1,7 +1,8 @@
 <app-header></app-header>
 <section class='section-connected'>
     <app-side-menu></app-side-menu>
-    <article id='dashboard-article' *ngIf="this.loginService.getCurrentUserRole()=='ROLE_MERCHANT'">
+    <article id='dashboard-article' >
+    <!-- <article id='dashboard-article' *ngIf="this.loginService.getCurrentUserRole()=='ROLE_MERCHANT'"> -->
         <h1 id="title">Dashboard</h1>
         <p>Bienvenue sur votre dashboard ! Ci dessous vous trouverez l'ensemble de vos commerces inscrits ainsi que vos demandes en cours. En cliquant sur le détail, vous pourrez effectuez des modifications !</p>
         <div id="all-shops" >
@@ -16,7 +17,7 @@
 
                     </div>
                     <div id="shop-infos-right">
-                        <button class='button-slim'  routerLink="/detail/{{shop.id}}">Voir détail</button>
+                        <button class='button-slim'  routerLink="/detail/{{shop._id}}">Voir détail</button>
                     </div>
                 </div>
             </div>

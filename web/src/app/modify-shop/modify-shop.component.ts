@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Shop } from '../.models/shop.model';
 import { User } from '../.models/user.model';
+import { Reward } from '../.models/reward.model';
 import { LoginService } from '../.services/login.services';
 import { ShopsService } from '../.services/shops.services';
 import { UserService } from '../.services/user.services';
@@ -33,7 +34,7 @@ export class ModifyShopComponent implements OnInit {
       this.hoursList.push(i);
     }
     this.rewardList = this.shopService.getRewardList();
-    this.secteurList = this.shopService.getSecteurList();
+      this.secteurList = this.shopService.getSecteurList();
 
    }
 
@@ -41,8 +42,7 @@ export class ModifyShopComponent implements OnInit {
 
     this.route.params.subscribe(routeParams => {
       this.getShop(routeParams.id)
-      //this.owner = this.userService.getUserById(this.shop.id);
-    });
+        });
 
     
   }
@@ -82,12 +82,11 @@ export class ModifyShopComponent implements OnInit {
 
     var id_user = this.loginService.getCurrentUser()._id;
     
-    if(this.f.reward.value == '0') {var reward = false;} else {reward = this.f.reward.value; }
     var shop = {
-      //reward: reward,
+      reward: this.f.reward.value,
       //shopowner: this.f.shopowner.value,
-      //description:this.f.description.value,
-      //phone:this.f.phone.value,
+      description:this.f.description.value,
+      phone_number:this.f.phone.value,
 
       _id:this.shop._id,
       hours: this.formatHours(),
@@ -113,8 +112,8 @@ export class ModifyShopComponent implements OnInit {
       name: [this.shop.name, Validators.required  ],
       siret_number: [this.shop.siret_number, Validators.required  ],
       shopowner: [this.owner.firstname+' '+this.owner.lastname  ],
-      reward: [this.rewardList.find(reward => reward==this.shopService.getShopReward(this.shop.id))  ],
-      phone: [this.shop.phone ? this.shop.phone : ''  ],
+      reward: [this.shop.reward ],
+      phone: [this.shop.phone_number ? this.shop.phone_number : ''  ],
       address: [this.shop.location.streetNumber+' '+this.shop.location.streetName, Validators.required  ],
       city: [this.shop.location.city , Validators.required ],
       zip_code: [this.shop.location.zipcode , Validators.required ],
