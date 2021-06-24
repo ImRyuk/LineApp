@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line/screens/favorites.dart';
 import 'package:line/screens/rewards.dart';
 import 'package:line/screens/search.dart';
 import 'package:line/style/colors.dart';
 import 'package:line/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../blocs/geolocate/geolocate_bloc.dart';
 
 class Home extends StatefulWidget {
   final SharedPreferences prefs;
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-    String _getTitle(int index) {
+  String _getTitle(int index) {
     switch (index) {
       case 0:
         return "Recherche";
@@ -47,14 +50,15 @@ class _HomeState extends State<Home> {
       _currentIndex = index;
     });
   }
+
   @override
   void initState() {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    GeolocateState geoState = context.watch<GeolocateBloc>().state;
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(

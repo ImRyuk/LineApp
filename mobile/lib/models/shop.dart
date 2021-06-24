@@ -56,15 +56,14 @@ class Shop extends Equatable {
         type = json['type'],
         hours = json['hours'],
         reward = json['reward'];
-  
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        '_id': id,
         'verified': verified,
         'siret_number': siretNumber,
         'name': name,
-        'location' : location,
-        'merchant' : merchantId,
+        'location': location,
+        'merchant': merchantId,
         'type': type,
         'hours': hours,
         'reward': reward

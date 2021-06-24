@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
                   notificationBloc: BlocProvider.of<NotificationBloc>(context)),
             ),
             BlocProvider<GeolocateBloc>(
-              create: (context) => GeolocateBloc(),
+              create: (context) => GeolocateBloc()..add(GeolocateStart()),
             )
           ],
           child: Home(prefs: prefs),
