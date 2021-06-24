@@ -33,7 +33,9 @@ exports.create_a_shop = async (req, res) => {
             verified: req.body.verified,
             city: req.body.city,
             hours: req.body.hours,
-            reward: req.body.reward
+            reward: req.body.reward,
+            description: req.body.description,
+            phone_number: req.body.phone_number,
         });
 
         // Save User in the database
